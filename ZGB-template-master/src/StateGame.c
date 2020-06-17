@@ -4,7 +4,7 @@
 #include "..\res\src\tiles.h"
 #include "..\res\src\ilusionforestiles.h"
 #include "..\res\src\map.h"
-#include "..\res\src\forest1_1.h"
+#include "..\res\src\forest1_2.h"
 
 #include "ZGBMain.h"
 #include "Scroll.h"
@@ -32,13 +32,13 @@ void Start_StateGame() {
 	}
 	SHOW_SPRITES;
 
-	scroll_target = SpriteManagerAdd(SpritePlayer, 105, 616);
+	scroll_target = SpriteManagerAdd(SpritePlayer, 24, 72);
 	OBP0_REG = PAL_DEF(3,0,1,2);
 	SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
 	SetPalette(BG_PALETTE, 0, 8, bp_forest1, bank_StateGame);
-	InitScroll(&forest1_1, col_tiles_1, col_down);
+	InitScroll(&forest1_2, col_tiles_1, col_down);
 	SHOW_BKG;
-	SpriteManagerAdd(SpriteSkeleton,144,552);
+	//SpriteManagerAdd(SpriteSkeleton,144,552);
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
@@ -46,7 +46,8 @@ void Start_StateGame() {
 }
 
 void Update_StateGame() {
-	
+	/*
+
 	if(scroll_target){
 		scroll_target = 0;
 		ny = player_y;
@@ -61,4 +62,6 @@ void Update_StateGame() {
 
 		MoveScroll(24, ny);
 	}
+
+	*/
 }

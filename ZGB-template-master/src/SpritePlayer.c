@@ -155,6 +155,7 @@ void Update_SpritePlayer() {
     UINT8 i;
 
     colisiones();
+  
     switch(player_state){
         case 0://Idle
 
@@ -274,6 +275,7 @@ void Update_SpritePlayer() {
         if(player_parent == 0 && player_state != 5){
 		if(player_accel_y < 60  ) {
 			player_accel_y += 4;
+            //SetSpriteAnim(THIS, p_anim_jump,15);
            
 		}
 		tile_collision = TranslateSprite(THIS, 0, (player_accel_y >> (4 << delta_time)));
