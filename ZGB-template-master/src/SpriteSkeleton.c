@@ -79,6 +79,7 @@ void Update_SpriteSkeleton(){
                 SkelDeathSound();
             }
             if(THIS->anim_frame == 3){
+                
                 SpriteManagerRemove(THIS_IDX);
                 
             }
@@ -89,9 +90,10 @@ void Update_SpriteSkeleton(){
     SPRITEMANAGER_ITERATE(i, spr) {
 			if(spr->type == SpriteChain) {
 				if(CheckCollision(THIS, spr)) {
-                    
+                    if(spr->anim_frame >=1){
 					data->skel_state = 3;
-				}
+                    }
+                }
 			}
 		}
 }

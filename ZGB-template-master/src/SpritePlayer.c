@@ -61,7 +61,7 @@ void mirrorPlayer1(){
 void colisiones(){
     UINT8 colision = GetScrollTile((THIS->x + THIS->coll_x) >> 3, (THIS ->y + 15u) >> 3);
     switch(colision){
-        case 94u:
+        case 125u:
             if(THIS->x > 150){
                 THIS->x = 8;
             }else{
@@ -124,7 +124,7 @@ void PlayerMovement(){
 void ladders(){
 if(KEY_PRESSED(J_UP)) {
 		UINT8 tile = GetScrollTile((THIS->x + THIS->coll_x) >> 3, (THIS ->y + 15u) >> 3);
-		if(tile == 95u )
+		if(tile == 126u )
 		{
 			THIS->x = ((THIS->x + THIS->coll_x)>> 3) << 3;
 			player_accel_y = 0;
@@ -133,7 +133,7 @@ if(KEY_PRESSED(J_UP)) {
 	}
 	if(KEY_PRESSED(J_DOWN)) {
 		UINT8 tile = GetScrollTile((THIS->x + THIS->coll_x) >> 3, (THIS ->y + 16u) >> 3);
-		if(tile == 95u )
+		if(tile == 126u )
 		{
 			THIS->x = ((THIS->x + THIS->coll_x)>> 3) << 3;
 			THIS->y = THIS->y + 1u;
@@ -142,6 +142,7 @@ if(KEY_PRESSED(J_UP)) {
 		}
 	}
 }
+
 void Start_SpritePlayer() {
     SlideCount = 0;
     canfall = FALSE;
@@ -231,8 +232,8 @@ void Update_SpritePlayer() {
             slide();
             break;
 
-        case 5:
-            i = 95;
+        case 5://ladders
+            i = 126;
             SetSpriteAnim(THIS,p_anim_ladders,1);
 			if(KEY_PRESSED(J_UP)) {
                 mirrorPlayer1();
@@ -254,7 +255,7 @@ void Update_SpritePlayer() {
 			} */
 
 			//Check the end of the ladder
-			if(i != 95u && i != 1u && i != 2u)
+			if(i != 126u && i != 1u && i != 2u)
 			{
 				//TranslateSprite(THIS, 0, 1 << delta_time);
 				player_state = 3;

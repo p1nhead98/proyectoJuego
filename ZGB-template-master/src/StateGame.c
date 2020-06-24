@@ -1,22 +1,27 @@
 #include "Banks/SetBank2.h"
-
+#include "main.h"
 #include "../res/src/player.h"
 #include "..\res\src\tiles.h"
 #include "..\res\src\ilusionforestiles.h"
-#include "..\res\src\map.h"
+
 #include "..\res\src\forest1_2.h"
 
-#include "ZGBMain.h"
 #include "Scroll.h"
+#include "Frame.h"
+#include "Sprite.h"
+#include "Keys.h"
 #include "SpriteManager.h"
 #include "Math.h"
+#include "gbt_player.h"
+#include "ZGBMain.h"
 #include "Palette.h"
-#include "Scroll.h"
 
-UINT8 col_tiles_1[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,53,54,57,58,59,60,61,62,0};
-UINT8 col_down[] = {32,34,35,36,38,39,95,96,55,0};
+UINT8 col_tiles_1[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,50,52,53,54,57,58,59,60,61,62,65,83,84,85,86,89,90,91,92,0};
+UINT8 col_down[] = {32,34,35,36,38,39,55,93,95,96,98,126,127,0};
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 const UINT16 bp_forest1[] = {PALETTE_FROM_HEADER(ilusionforestiles)};
+
+extern UINT8* forest_mod_Data[];
 
 extern INT16 player_x;
 extern INT16 player_y;
@@ -42,7 +47,7 @@ void Start_StateGame() {
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
-	
+	PlayMusic(forest_mod_Data,5,1);
 }
 
 void Update_StateGame() {
