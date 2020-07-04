@@ -41,6 +41,11 @@ void Start_SpriteSkeleton(){
     data->skel_state = 0;
     data->counter = 0;
     SetSpriteAnim(THIS,skel_1,1);
+    if(THIS->x < player_x){
+        SPRITE_UNSET_VMIRROR(THIS);
+    }else{
+        SPRITE_SET_VMIRROR(THIS);
+    }
 }
 
 void Update_SpriteSkeleton(){
@@ -72,18 +77,7 @@ void Update_SpriteSkeleton(){
                 }
             }
             break;
-        case 3:
-            
-            SetSpriteAnim(THIS,skel_4,30);
-            if(THIS->anim_frame <= 0){
-                SkelDeathSound();
-            }
-            if(THIS->anim_frame == 3){
-                
-                SpriteManagerRemove(THIS_IDX);
-                
-            }
-            break;
+      
 
     }
 
@@ -91,7 +85,9 @@ void Update_SpriteSkeleton(){
 			if(spr->type == SpriteChain) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
-					data->skel_state = 3;
+                    SkelDeathSound();
+					 SpriteManagerRemove(THIS_IDX);
+                     SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     }
                 }
 			}

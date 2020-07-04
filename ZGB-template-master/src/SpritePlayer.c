@@ -11,14 +11,22 @@ const UINT8 p_anim_slide[] = {1,4};
 const UINT8 p_anim_jump[] = {1,5};
 const UINT8 p_anim_attack[] = {4,6,6,7,7};
 const UINT8 p_anim_ladders[] = {1,8};
+
 BOOLEAN canfall;
 INT16 player_accel_y;
+struct Sprite* sprite_player = 0;
 struct Sprite* player_parent = 0;
 UINT8 tile_collision;
 INT8 player_state;
 INT8 SlideCount;
 INT16 player_x,player_y;
 INT8 mirrorCount1 = 0;
+BOOLEAN fall;
+BOOLEAN canEnter;
+
+extern UINT8 current_level;
+extern UINT8 last_level;
+
 void playerCollisions(){
         if(player_state == 4){
             THIS->coll_x = 3;
@@ -68,6 +76,18 @@ void colisiones(){
                 THIS->x = 184;
             }
             break;
+        case 123u: 
+            if(canEnter == FALSE){
+                canEnter = TRUE;
+                SpriteManagerAdd(SpriteUp, THIS->x, THIS->y-8);
+            } 
+            break;
+        case 124u:
+            fall =TRUE;
+            break;
+    }
+    if(colision != 123u && canEnter == TRUE){
+        canEnter = FALSE;
     }
 }
 
@@ -149,14 +169,44 @@ void Start_SpritePlayer() {
     player_accel_y = 0;
     player_state = 3;
     mirrorCount1 = 0;
+    sprite_player = THIS;
+    fall = FALSE;
     playerCollisions();
+    canEnter = FALSE;
 }
 
 void Update_SpritePlayer() {
     UINT8 i;
-
     colisiones();
+    if(fall == TRUE && player_state != 5){
+        THIS->y+=player_accel_y;
+        SetSpriteAnim(THIS, p_anim_jump, 15);
+    }
+    
   
+
+
+    if(canEnter == TRUE && KEY_TICKED(J_UP)){
+        switch(current_level){
+            case 0:
+                last_level = current_level;
+                current_level++;
+                SetState(current_state);
+                break;
+            case 1:
+                last_level = current_level;
+                if(THIS->y < 150){
+                    current_level++;
+                }else{
+                    current_level--;
+                }
+                SetState(current_state);
+                break;
+
+        }    
+    }
+
+
     switch(player_state){
         case 0://Idle
 
@@ -290,7 +340,7 @@ void Update_SpritePlayer() {
 			
 				player_accel_y = 0;
                
-                  if(player_state == 3 || player_state == 2){
+                  if( player_state == 3 || player_state == 2){
                         player_state = 0;
                   }
                     
@@ -300,11 +350,21 @@ void Update_SpritePlayer() {
 
 			 CheckCollisionTile();
 		}
+        if(player_state == 0 && player_accel_y == 20){
+            player_state = 3;
         }
+        }
+        if(player_parent && player_state == 3 ){
+                        player_accel_y = 0;
+                        player_state = 0;
+                  }
+
     player_x = THIS->x;
     player_y = THIS->y;
     
 }
 
 void Destroy_SpritePlayer() {
+    sprite_player = 0 ;
+    SetState(current_state);
 }
