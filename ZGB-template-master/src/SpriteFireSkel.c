@@ -1,15 +1,17 @@
-#include "Banks/SetBank2.h"
+#include "Banks/SetBank3.h"
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "Math.h"
 #include "Sound.h"
+#include "energy.h"
 
 extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 fskel_1[] = {4, 0,1,2,1};
 const UINT8 fskel_2[] = {1, 1};
+extern UINT8 energy;
 struct FSkeletonCustomData
 {
     UINT8 skel_state;
@@ -49,9 +51,13 @@ void Start_SpriteFireSkel(){
     data->skel_state = 0;
     data->counter = 0;
     data->counter2 = 0;
-    data->lives = 4;
+    data->lives = 7;
     data->canHurt = FALSE;
     data->canAttack = TRUE;
+    THIS->coll_x = 5;
+    THIS->coll_y = 3;
+    THIS->coll_w = 5;
+    THIS->coll_h = 13;
     SetSpriteAnim(THIS,fskel_1,9);
 }
 
@@ -110,9 +116,30 @@ void Update_SpriteFireSkel(){
                         if(data->lives >0 && data->canHurt == FALSE){
                             data->canHurt = TRUE;
                             data->lives--;
+                            
                             data->skel_state = 1;
                             SetSpriteAnim(THIS,fskel_2,1);
-                        }else if(data->lives == 0){
+                        }else if(data->lives < 1){
+                            FSkelDeathSound();
+					        SpriteManagerRemove(THIS_IDX);
+                            SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                            if(energy<=19){
+                                energy = energy+3;
+                            }
+                            refreshEnergy(energy);
+                        }
+                    }
+                }
+			}
+            if(spr->type == SpriteBumerang) {
+				if(CheckCollision(THIS, spr)) {
+                    if(spr->anim_frame >=1){
+                        if(data->lives >0 && data->canHurt == FALSE){
+                            data->canHurt = TRUE;
+                            data->lives--;
+                            data->skel_state = 1;
+                            SetSpriteAnim(THIS,fskel_2,1);
+                        }else if(data->lives < 1){
                             FSkelDeathSound();
 					        SpriteManagerRemove(THIS_IDX);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);

@@ -10,6 +10,10 @@ const UINT8 bullet_1[] ={2, 0,1};
 
 void Start_SpriteEnemyBullet(){
     SetSpriteAnim(THIS, bullet_1, 15);
+    THIS->coll_x = 2;
+    THIS->coll_y = 6;
+    THIS->coll_w = 4;
+    THIS->coll_h = 4;
 }
 void Update_SpriteEnemyBullet(){
     switch(THIS->unique_id){

@@ -5,13 +5,14 @@
 #include "Scroll.h"
 #include "Math.h"
 #include "Sound.h"
-
+#include "energy.h"
 extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 skel_1[] = {1, 0};
 const UINT8 skel_2[] = {6, 0,1,2,3,4,4};
 const UINT8 skel_3[] = {4, 4,5,4,6};
 const UINT8 skel_4[] = {4, 7,8,9,9};
+extern UINT8 energy;
 struct SkeletonCustomData
 {
     UINT8 skel_state;
@@ -46,6 +47,11 @@ void Start_SpriteSkeleton(){
     }else{
         SPRITE_SET_VMIRROR(THIS);
     }
+
+    THIS->coll_x = 5;
+    THIS->coll_y = 3;
+    THIS->coll_w = 5;
+    THIS->coll_h = 13;
 }
 
 void Update_SpriteSkeleton(){
@@ -82,12 +88,24 @@ void Update_SpriteSkeleton(){
     }
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain) {
+			if(spr->type == SpriteChain ) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
-                    SkelDeathSound();
-					 SpriteManagerRemove(THIS_IDX);
-                     SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                        SkelDeathSound();
+					    SpriteManagerRemove(THIS_IDX);
+                        if(energy<=19){
+                            energy++;
+                        }
+                        refreshEnergy(energy);
+                        SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                    }
+                }
+			}else if(spr->type == SpriteBumerang ) {
+				if(CheckCollision(THIS, spr)) {
+                    if(spr->anim_frame >=1){
+                        SkelDeathSound();
+					    SpriteManagerRemove(THIS_IDX);
+                        SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     }
                 }
 			}

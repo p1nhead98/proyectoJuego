@@ -33,7 +33,7 @@ void Start_SpriteChain(){
 }
 
 void Update_SpriteChain(){
-    
+    SPRITE_SET_PALETTE(THIS, 0);
     WhipSound();
     if(SPRITE_GET_VMIRROR(THIS)){
        if(THIS->anim_frame >=2){
@@ -74,7 +74,7 @@ void Update_SpriteChain(){
         }
     }
   
-    if(THIS->anim_frame == 4 || player_state == 3 || player_state == 0 || player_state == 5){
+    if(THIS->anim_frame == 4 || player_state == 3 || player_state == 0 || player_state == 5 || player_state == 6){
         SpriteManagerRemove(THIS_IDX);
     }
     

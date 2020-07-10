@@ -20,6 +20,7 @@ _SPRITE_DMG(SpriteFlyingMen, flyingmen)\
 _SPRITE_DMG(SpriteFireSkel, fireskel)\
 _SPRITE_DMG(SpriteFlame, flame)\
 _SPRITE_DMG(SpriteUp, up)\
+_SPRITE_DMG(SpriteBumerang, bumerang)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

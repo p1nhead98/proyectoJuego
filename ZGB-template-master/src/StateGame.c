@@ -4,10 +4,12 @@
 
 #include "..\res\src\towntiles.h"
 #include "..\res\src\housetiles.h"
-
+#include "../res/src/font.h"
+#include "../res/src/window.h"
 
 #include "Scroll.h"
 #include "Frame.h"
+#include "Print.h"
 #include "Sprite.h"
 #include "Keys.h"
 #include "SpriteManager.h"
@@ -58,13 +60,23 @@ void Start_StateGame() {
 	SpriteManagerLoad(11);
 	SpriteManagerLoad(12);
 	SpriteManagerLoad(13);
+	SpriteManagerLoad(14);
 	
 	SHOW_SPRITES;
 
 	//scroll_target = SpriteManagerAdd(SpritePlayer, 24, 72);
 	OBP0_REG = PAL_DEF(2,0,1,3);
+	OBP1_REG = PAL_DEF(0,0,0,0);
 	BGP_REG = PAL_DEF(0,1,2,3);
 	
+	INIT_FONT(font, PRINT_WIN);
+	WX_REG = 7;
+	WY_REG = (144 - (2 << 3));
+	scroll_h_border = 2 << 3;
+	InitWindow(0, 0, &window);
+	SHOW_WIN;
+	
+
 	switch(current_level){
 	
 	case 0:

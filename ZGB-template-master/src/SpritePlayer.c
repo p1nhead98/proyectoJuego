@@ -4,28 +4,91 @@
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "Sound.h"
-
+#include "Print.h"
+#include "energy.h"
 const UINT8 p_anim_walk[] = {4,1,2,1,3};
 const UINT8 p_anim_idle[] = {1,0};
 const UINT8 p_anim_slide[] = {1,4};
 const UINT8 p_anim_jump[] = {1,5};
 const UINT8 p_anim_attack[] = {4,6,6,7,7};
-const UINT8 p_anim_ladders[] = {1,8};
+const UINT8 p_anim_ladders[] = {2,8,8};
+const UINT8 p_anim_hit[] = {5,9,9,9,9,9};
 
-BOOLEAN canfall;
+
 INT16 player_accel_y;
 struct Sprite* sprite_player = 0;
 struct Sprite* player_parent = 0;
 UINT8 tile_collision;
 INT8 player_state;
-INT8 SlideCount;
+INT8 SlideCount, post_h_counter;
 INT16 player_x,player_y;
-INT8 mirrorCount1 = 0;
+
+BOOLEAN inmu;
 BOOLEAN fall;
 BOOLEAN canEnter;
+BOOLEAN hit_dir; 
+INT16 inmunity = 0;
+
+extern const UINT8 max_life;
+UINT8 current_life;
+extern const INT8 inmunity_time;
+extern UINT8 energy;
 
 extern UINT8 current_level;
 extern UINT8 last_level;
+
+
+
+const UINT8 HEART_TILE = 122;
+const UINT8 EMPTY_HEART_TILE = 121;
+
+void RefreshLife() {
+	UINT8 i;
+    
+    DPRINT(2, 0, "LIFE");
+  
+	for(i = 0; i != current_life; ++i) {
+		set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE);
+	}
+	for(; i != max_life; ++i) {
+		set_win_tiles(1 + i, 1, 1, 1, &EMPTY_HEART_TILE);
+	}
+}
+ 
+void pHit(){
+    if(inmunity == 0) {
+			
+			
+			
+			RefreshLife();
+			if(current_life == 0) {
+				SetState(current_state);
+			} else {
+				SPRITE_SET_PALETTE(THIS, 1);
+				inmunity = inmunity_time;
+                inmu=TRUE;
+			}
+	}
+}
+
+void hit(BOOLEAN dir){
+    
+    SetSpriteAnim(THIS, p_anim_hit, 15);
+    if(dir == FALSE){
+        TranslateSprite(THIS, -1, 0);
+        SPRITE_UNSET_VMIRROR(THIS);
+    }else{
+        TranslateSprite(THIS, 1, 0);
+        SPRITE_SET_VMIRROR(THIS);
+    }
+
+    if(THIS->anim_frame==4){
+
+        player_state = 0;
+        SlideCount = 0;
+		pHit();
+    }
+}
 
 void playerCollisions(){
         if(player_state == 4){
@@ -49,21 +112,6 @@ void CheckCollisionTile() {
 			//SetState(STATE_VICTORY);
 			break;
 	}
-}
-
-void mirrorPlayer1(){
-      
-    if(KEY_PRESSED(J_UP) || KEY_PRESSED(J_DOWN)){
-    if(mirrorCount1 <=30){
-        mirrorCount1++;
-        switch(mirrorCount1){
-            case 1: SPRITE_SET_VMIRROR(THIS); break;
-            case 15: SPRITE_UNSET_VMIRROR(THIS);  break;
-            case 30: mirrorCount1 = 0; break;
-
-        }
-    }
-    }
 }
 
 void colisiones(){
@@ -124,6 +172,11 @@ void attack(){
     sprite_chain->flags = THIS->flags;
 }
 
+void attack1(){
+    struct Sprite* sprite_bumerang = SpriteManagerAdd(SpriteBumerang,THIS->x,THIS->y);
+    sprite_bumerang->flags = THIS->flags;
+}
+
 void PlayerMovement(){
    
     if(KEY_PRESSED(J_RIGHT)){
@@ -165,19 +218,29 @@ if(KEY_PRESSED(J_UP)) {
 
 void Start_SpritePlayer() {
     SlideCount = 0;
-    canfall = FALSE;
+    inmu = FALSE;
     player_accel_y = 0;
     player_state = 3;
-    mirrorCount1 = 0;
     sprite_player = THIS;
     fall = FALSE;
     playerCollisions();
+    current_life = 4;
+    RefreshLife();
+    refreshEnergy(energy);
     canEnter = FALSE;
+    post_h_counter = 0;
+    inmunity = 0;
 }
 
 void Update_SpritePlayer() {
     UINT8 i;
+    struct Sprite* spr;
+
+
     colisiones();
+    
+  
+    
     if(fall == TRUE && player_state != 5){
         THIS->y+=player_accel_y;
         SetSpriteAnim(THIS, p_anim_jump, 15);
@@ -227,17 +290,26 @@ void Update_SpritePlayer() {
             if(KEY_PRESSED(J_DOWN) && KEY_TICKED(J_A) ){
                 player_state = 4;
             }
-            if(KEY_TICKED(J_B) && !KEY_TICKED(J_A)){
+            if(KEY_TICKED(J_B) && !KEY_TICKED(J_A) && !KEY_PRESSED(J_UP)){
                 PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
                 player_state = 1;
                 attack();
                 //SpriteManagerAdd(SpriteChain,THIS->x,THIS->y);
             }
             
-            if(KEY_TICKED(J_B) && KEY_TICKED(J_A)){
+            if(KEY_TICKED(J_B) && KEY_TICKED(J_A) && !KEY_PRESSED(J_UP)){
                 PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
                 player_state = 2;
                 attack();
+            }
+
+            if(KEY_PRESSED(J_UP) && KEY_TICKED(J_B) && !KEY_TICKED(J_A)){
+                if(energy != 0){
+                    attack1();
+                    energy--;
+                    refreshEnergy(energy);
+                    player_state = 1;
+                }
             }
             
             break;
@@ -284,14 +356,24 @@ void Update_SpritePlayer() {
 
         case 5://ladders
             i = 126;
-            SetSpriteAnim(THIS,p_anim_ladders,1);
+            SetSpriteAnim(THIS,p_anim_ladders,12);
 			if(KEY_PRESSED(J_UP)) {
-                mirrorPlayer1();
+                if(THIS->anim_frame == 1){
+                    SPRITE_SET_VMIRROR(THIS);
+                }else{
+                    SPRITE_UNSET_VMIRROR(THIS);
+                }
+                
 				tile_collision = TranslateSprite(THIS, 0, -1 << delta_time);
 				CheckCollisionTile();
 				i = GetScrollTile((THIS->x + THIS->coll_x) >> 3, (THIS->y + 15u) >> 3);
 			} else if(KEY_PRESSED(J_DOWN)) {
-                mirrorPlayer1();
+                if(THIS->anim_frame == 1){
+                    SPRITE_SET_VMIRROR(THIS);
+                }else{
+                    SPRITE_UNSET_VMIRROR(THIS);
+                }
+              
 				tile_collision = TranslateSprite(THIS, 0, 1 << delta_time);
 				CheckCollisionTile();
 				i = GetScrollTile((THIS->x + THIS->coll_x) >> 3, (THIS->y + 16u) >> 3);
@@ -317,7 +399,16 @@ void Update_SpritePlayer() {
 				jump();
 			}
             break;
+
+
+        case 6: 
+            hit(hit_dir);
+            break;
         
+
+        case 7: 
+
+            break;
     }
 
 
@@ -362,6 +453,43 @@ void Update_SpritePlayer() {
     player_x = THIS->x;
     player_y = THIS->y;
     
+
+
+
+    SPRITEMANAGER_ITERATE(i, spr) {
+		if(spr->type == SpriteSkeleton || spr->type == SpriteFlame || spr->type == SpriteFireSkel) {
+			if(CheckCollision(THIS, spr)) {
+                if(player_state != 6 && inmu == FALSE){
+                    if(THIS->x < spr->x){
+                        hit_dir = FALSE;
+                    }else{
+                        hit_dir = TRUE;
+                    }
+                    current_life--;
+                    player_state = 6;
+                }
+            }
+		}
+	}
+
+
+
+    if(inmunity != 0) {
+        
+		inmunity -= (1 << delta_time);
+        if((inmunity % 2 == 0)){
+            SPRITE_SET_PALETTE(THIS, 1);
+        }else{
+            SPRITE_SET_PALETTE(THIS, 0);
+        }
+		if(inmunity < 1) {
+			inmunity = 0;
+            inmu = FALSE;
+			SPRITE_SET_PALETTE(THIS, 0);
+
+			
+		}
+	}
 }
 
 void Destroy_SpritePlayer() {
