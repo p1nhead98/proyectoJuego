@@ -7,6 +7,8 @@
 #include "../res/src/font.h"
 #include "../res/src/window.h"
 
+#include <gb/gb.h> 
+#include "main.h"
 #include "Scroll.h"
 #include "Frame.h"
 #include "Print.h"
@@ -29,6 +31,7 @@ UINT8 col_tiles_house[] = {1,2,3,0};
 UINT8 col_down_house[] = {126,127,0};
 const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
+extern UINT8* gameover_mod_Data[];
 
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
@@ -82,14 +85,14 @@ void Start_StateGame() {
 	case 0:
 		
 		if(last_level == 0){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 16, 88);
+			scroll_target = SpriteManagerAdd(SpritePlayer, 16, 80);
 		}else if(last_level == 1){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 584, 88);
+			scroll_target = SpriteManagerAdd(SpritePlayer, 584, 80);
 		}
 		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
 		SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
 		InitScroll(level, col_tiles_town, col_down_town);
-		
+		PlayMusic(gameover_mod_Data, 5, 0);
 		break;
 	case 1:
 		if(last_level == 0){
@@ -137,5 +140,8 @@ void Update_StateGame() {
 	if(KEY_TICKED(J_SELECT)){
 		current_level++;	
 		SetState(current_state);
+	}
+	if(KEY_TICKED(J_START)){
+		
 	}
 }

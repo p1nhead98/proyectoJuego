@@ -5,7 +5,7 @@ UINT8 next_state = StateGame;
 
 UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 	if(current_state == StateGame) {
-		*tile = 0;
+		*tile = 2;
 		switch (*tile_ptr){
 		case 254: return SpriteGhost; break;
 		case 253: return SpriteWoodSpider; break;
