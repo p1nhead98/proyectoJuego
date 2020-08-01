@@ -3,9 +3,10 @@
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "Math.h"
+#include "energy.h"
 extern INT16 player_x;
 const UINT8 f_men[] = {3, 0,1,2};
-
+extern UINT8 energy;
 struct fmenCustomData
 {
 
@@ -22,6 +23,8 @@ void Start_SpriteFlyingMen(){
 
 void Update_SpriteFlyingMen(){
     struct fmenCustomData* data = (struct fmenCustomData*)THIS->custom_data;
+       UINT8 i;
+   struct Sprite* spr;
 
     if(THIS->x > player_x){
         SPRITE_SET_VMIRROR(THIS);
@@ -39,6 +42,30 @@ void Update_SpriteFlyingMen(){
             data->counter = 0;
         }
     }
+
+       SPRITEMANAGER_ITERATE(i, spr) {
+			if(spr->type == SpriteChain ) {
+				if(CheckCollision(THIS, spr)) {
+                    if(spr->anim_frame >=1){
+                        //SkelDeathSound();
+					    SpriteManagerRemove(THIS_IDX);
+                        if(energy<=19){
+                            energy++;
+                        }
+                        refreshEnergy(energy);
+                        SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                    }
+                }
+			}else if(spr->type == SpriteBumerang ) {
+				if(CheckCollision(THIS, spr)) {
+                    if(spr->anim_frame >=1){
+                        //SkelDeathSound();
+					    SpriteManagerRemove(THIS_IDX);
+                        SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                    }
+                }
+			}
+		}
 }
 
 void Destroy_SpriteFlyingMen(){

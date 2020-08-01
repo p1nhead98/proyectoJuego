@@ -37,17 +37,19 @@ void Update_SpriteChain(){
     WhipSound();
     if(SPRITE_GET_VMIRROR(THIS)){
        if(THIS->anim_frame >=2){
-             THIS->coll_x = 7;
-            THIS->coll_y = 7;
-            THIS->coll_w = 3;
-            THIS->coll_h = 3;
-            THIS->y = player_y+4;
-            THIS->x = player_x -14;
-        }else{
-                    THIS->coll_x = 0;
+            THIS->coll_x = 0;
             THIS->coll_y = 6;
             THIS->coll_w = 16;
             THIS->coll_h = 2;
+            THIS->y = player_y+4;
+            THIS->x = player_x -14;
+        }else{
+            
+
+            THIS->coll_x = 7;
+            THIS->coll_y = 7;
+            THIS->coll_w = 3;
+            THIS->coll_h = 3;
             THIS->y = player_y - 5;
             THIS->x = player_x +10;
             
@@ -56,18 +58,20 @@ void Update_SpriteChain(){
     }else{
         
         if(THIS->anim_frame >=2){
-            THIS->coll_x = 7;
-            THIS->coll_y = 7;
-            THIS->coll_w = 3;
-            THIS->coll_h = 3;
+            
+
+            THIS->coll_x = 0;
+            THIS->coll_y = 6;
+            THIS->coll_w = 16;
+            THIS->coll_h = 2;
             THIS->y = player_y+4;
             THIS->x = player_x +14;
         }else{
             
-                    THIS->coll_x = 0;
-            THIS->coll_y = 6;
-            THIS->coll_w = 16;
-            THIS->coll_h = 2;
+            THIS->coll_x = 7;
+            THIS->coll_y = 7;
+            THIS->coll_w = 3;
+            THIS->coll_h = 3;
             THIS->y = player_y - 5;
             THIS->x = player_x -10;
             

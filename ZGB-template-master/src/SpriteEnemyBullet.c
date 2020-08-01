@@ -16,6 +16,9 @@ void Start_SpriteEnemyBullet(){
     THIS->coll_h = 4;
 }
 void Update_SpriteEnemyBullet(){
+    UINT8 i;
+    struct Sprite* spr;
+
     switch(THIS->unique_id){
         case 1:
             THIS->y++;
@@ -33,9 +36,9 @@ void Update_SpriteEnemyBullet(){
 
         case 4:
             if(SPRITE_GET_VMIRROR(THIS)){
-                THIS->x--;
+                THIS->x = THIS->x - 3;
             }else{
-                THIS->x++;
+                THIS->x = THIS->x + 3;
             }
             break;
         
@@ -51,8 +54,18 @@ void Update_SpriteEnemyBullet(){
         
     }
    
-
+    SPRITEMANAGER_ITERATE(i, spr) {
+		if(spr->type == SpritePlayer) {
+			if(CheckCollision(THIS, spr)) {
+               //SpriteManagerRemove(THIS_IDX);
+            }
+		}
+	}
 }
 void Destroy_SpriteEnemyBullet(){
 
 }
+
+
+
+

@@ -2,7 +2,7 @@
 #include "main.h"
 #include "../res/src/player.h"
 
-#include "..\res\src\towntiles.h"
+#include "..\res\src\towntilesgb.h"
 #include "..\res\src\housetiles.h"
 #include "../res/src/font.h"
 #include "../res/src/window.h"
@@ -23,15 +23,16 @@
 UINT8 col_tiles_forest[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,50,52,53,54,57,58,59,60,61,62,65,83,84,85,86,89,90,91,92,0};
 UINT8 col_down_forest[] = {32,34,35,36,38,39,55,93,95,96,98,126,127,0};
 
-UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,0};
+UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,71,73,77,0};
 UINT8 col_down_town[] = {126,127,0};
-const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntiles)};
+const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntilesgb)};
 
-UINT8 col_tiles_house[] = {1,2,3,0};
+UINT8 col_tiles_house[] = {1,2,3,27,28,23,24,25,26,4,5,0};
 UINT8 col_down_house[] = {126,127,0};
 const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
 extern UINT8* gameover_mod_Data[];
+extern UINT8 current_life;
 
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
@@ -60,11 +61,12 @@ void Start_StateGame() {
 	SpriteManagerLoad(7);
 	SpriteManagerLoad(9);
 	SpriteManagerLoad(10);
-	SpriteManagerLoad(11);
-	SpriteManagerLoad(12);
+	
 	SpriteManagerLoad(13);
 	SpriteManagerLoad(14);
-	
+	SpriteManagerLoad(15);
+	SpriteManagerLoad(16);
+	SpriteManagerLoad(17);
 	SHOW_SPRITES;
 
 	//scroll_target = SpriteManagerAdd(SpritePlayer, 24, 72);
@@ -85,7 +87,9 @@ void Start_StateGame() {
 	case 0:
 		
 		if(last_level == 0){
+			current_life = 4;
 			scroll_target = SpriteManagerAdd(SpritePlayer, 16, 80);
+    		
 		}else if(last_level == 1){
 			scroll_target = SpriteManagerAdd(SpritePlayer, 584, 80);
 		}
@@ -97,11 +101,47 @@ void Start_StateGame() {
 	case 1:
 		if(last_level == 0){
 			scroll_target = SpriteManagerAdd(SpritePlayer, 32, 224);
+		}else{
+			scroll_target = SpriteManagerAdd(SpritePlayer,128,56);
 		}
 		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
 		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
 		InitScroll(level, col_tiles_house, col_down_house);
 		break;
+
+	case 2:
+		if(last_level == 1){
+			scroll_target = SpriteManagerAdd(SpritePlayer, 56, 96);
+		}else{
+			scroll_target = SpriteManagerAdd(SpritePlayer, 616, 56);
+		}
+		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+		SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+		InitScroll(level, col_tiles_town, col_down_town);
+		break;
+
+	case 3:
+		if(last_level == 2){
+			scroll_target = SpriteManagerAdd(SpritePlayer, 48, 56);
+		}else{
+			scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
+		}
+		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
+		InitScroll(level, col_tiles_house, col_down_house);
+		break;
+
+	case 4:
+		if(last_level == 3){
+			scroll_target = SpriteManagerAdd(SpritePlayer, 32, 56);
+		}else{
+			scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
+		}
+		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
+		InitScroll(level, col_tiles_house, col_down_house);
+		break;
+
 /*	case 2:
 		MoveScroll(20, 568);
 		scroll_target = SpriteManagerAdd(SpritePlayer, 100, 616);

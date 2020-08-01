@@ -1,4 +1,4 @@
-#include "Banks/SetBank2.h"
+#include "Banks/SetBank3.h"
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "ZGBMain.h"

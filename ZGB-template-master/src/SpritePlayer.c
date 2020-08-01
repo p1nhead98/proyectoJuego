@@ -13,7 +13,7 @@ const UINT8 p_anim_jump[] = {1,5};
 const UINT8 p_anim_attack[] = {4,6,6,7,7};
 const UINT8 p_anim_ladders[] = {2,8,8};
 const UINT8 p_anim_hit[] = {5,9,9,9,9,9};
-
+const UINT8 p_anim_fall[] = {1,10};
 
 INT16 player_accel_y;
 struct Sprite* sprite_player = 0;
@@ -37,6 +37,7 @@ extern UINT8 energy;
 extern UINT8 current_level;
 extern UINT8 last_level;
 
+BOOLEAN run;
 
 
 const UINT8 HEART_TILE = 122;
@@ -63,6 +64,7 @@ void pHit(){
 			RefreshLife();
 			if(current_life == 0) {
 				SetState(current_state);
+                current_life = 4;
 			} else {
 				SPRITE_SET_PALETTE(THIS, 1);
 				inmunity = inmunity_time;
@@ -158,7 +160,7 @@ void slide(){
         }
         SlideCount++;
         if(SlideCount == 15){
-            player_state = 0;
+            player_state = 3;
             SlideCount = 0;
             playerCollisions();
         }
@@ -224,7 +226,6 @@ void Start_SpritePlayer() {
     sprite_player = THIS;
     fall = FALSE;
     playerCollisions();
-    current_life = 4;
     RefreshLife();
     refreshEnergy(energy);
     canEnter = FALSE;
@@ -243,11 +244,11 @@ void Update_SpritePlayer() {
     
     if(fall == TRUE && player_state != 5){
         THIS->y+=player_accel_y;
-        SetSpriteAnim(THIS, p_anim_jump, 15);
+        SetSpriteAnim(THIS, p_anim_fall, 0);
     }
     
   
-
+    
 
     if(canEnter == TRUE && KEY_TICKED(J_UP)){
         switch(current_level){
@@ -265,6 +266,36 @@ void Update_SpritePlayer() {
                 }
                 SetState(current_state);
                 break;
+            
+            case 2:
+                last_level = current_level;
+                if(THIS->x < 150){
+                    current_level--;
+                }else{
+                    current_level++;
+                }
+                SetState(current_state);
+                break;
+            
+            case 3:
+                last_level = current_level;
+                if(THIS->x < 150){
+                    current_level--;
+                }else{
+                    current_level++;
+                }
+                SetState(current_state);
+                break;
+
+             case 4:
+                last_level = current_level;
+                if(THIS->x < 150){
+                    current_level--;
+                }else{
+                    current_level++;
+                }
+                SetState(current_state);
+                break;       
 
         }    
     }
@@ -279,8 +310,11 @@ void Update_SpritePlayer() {
         
             if(KEY_PRESSED(J_LEFT) || KEY_PRESSED(J_RIGHT)){
                 SetSpriteAnim(THIS,p_anim_walk,9);
+                
+                
             }else{
                 SetSpriteAnim(THIS,p_anim_idle,15);
+                
             }
             
             if(KEY_TICKED(J_A) && !KEY_PRESSED(J_DOWN)){
@@ -338,7 +372,11 @@ void Update_SpritePlayer() {
             break;
 
         case 3://Jumping
-            SetSpriteAnim(THIS, p_anim_jump, 15);
+            if(player_accel_y < 1){
+                SetSpriteAnim(THIS, p_anim_jump, 15);
+            }else{
+                SetSpriteAnim(THIS, p_anim_fall, 15);
+            }
             if(player_accel_y < 0 && !KEY_PRESSED(J_A)){
                 player_accel_y = 0;
             }
@@ -457,9 +495,12 @@ void Update_SpritePlayer() {
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpriteSkeleton || spr->type == SpriteFlame || spr->type == SpriteFireSkel) {
+        
+		if(spr->type == SpriteSkeleton || spr->type == SpriteFlame || spr->type == SpriteFireSkel || spr->type == SpriteEnemyBullet 
+        || spr->type == SpriteEye || spr->type == SpriteShooter || spr->type == SpriteTinyDevil) {
 			if(CheckCollision(THIS, spr)) {
-                if(player_state != 6 && inmu == FALSE){
+                if((player_state == 0 || player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4
+                ||  player_state == 5) && inmu == FALSE){
                     if(THIS->x < spr->x){
                         hit_dir = FALSE;
                     }else{
@@ -470,6 +511,21 @@ void Update_SpritePlayer() {
                 }
             }
 		}
+
+         if(spr->type == SpriteLand ){
+            if(CheckCollision(THIS,spr) && player_accel_y > 15 ){
+                     
+                       if(THIS->y + 4 < spr->y){
+                        THIS->y = spr->y-15;
+                        player_accel_y = 15;
+                        if(player_state == 3){
+                            player_state= 0;
+                        }
+                        
+                        }
+        }
+        
+    }
 	}
 
 
@@ -494,5 +550,8 @@ void Update_SpritePlayer() {
 
 void Destroy_SpritePlayer() {
     sprite_player = 0 ;
+    if(THIS->y < scroll_y){
+        current_life--;
+    }
     SetState(current_state);
 }

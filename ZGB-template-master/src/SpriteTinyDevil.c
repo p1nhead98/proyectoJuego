@@ -61,14 +61,14 @@ void Update_SpriteTinyDevil(){
     switch (data->state){
         case 0: 
             SetSpriteAnim(THIS, tdevil_1,9);
-            if(data->counter <= 3){
+            if(data->counter <= 2){
                 data->counter++;
-                if(data->counter == 3){
+                if(data->counter == 2){
                     tdevilMovement();
                     data->counter = 0;
                 }
             }
-            if(DISTANCE(THIS->x, player_x) < 20){
+            if(DISTANCE(THIS->x, player_x) < 27){
                 PlayFx(CHANNEL_1 , 10, 0x76, 0xd3, 0x54, 0x73,0x86);
                 tdevilJump(data);
                 if(THIS->x < player_x){
@@ -82,7 +82,7 @@ void Update_SpriteTinyDevil(){
         
         case 1:
             SetSpriteAnim(THIS, tdevil_2, 0);
-            if(THIS->x == player_x){
+            if(DISTANCE(THIS->x, player_x) < 2){
                 data->state = 2;
             }
             if(data->direction){
