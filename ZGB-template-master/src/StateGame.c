@@ -1,4 +1,4 @@
-#include "Banks/SetBank2.h"
+#include "Banks/SetBank5.h"
 #include "main.h"
 #include "../res/src/player.h"
 
@@ -6,6 +6,8 @@
 #include "..\res\src\housetiles.h"
 #include "../res/src/font.h"
 #include "../res/src/window.h"
+#include "../res/src/gobpalette.h"
+#include "../res/src/gospalette.h"
 
 #include <gb/gb.h> 
 #include "main.h"
@@ -20,20 +22,27 @@
 #include "ZGBMain.h"
 #include "Palette.h"
 
+
 UINT8 col_tiles_forest[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,50,52,53,54,57,58,59,60,61,62,65,83,84,85,86,89,90,91,92,0};
 UINT8 col_down_forest[] = {32,34,35,36,38,39,55,93,95,96,98,126,127,0};
 
-UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,71,73,77,0};
+UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,78,79,80,81,82,83,84,0};
 UINT8 col_down_town[] = {126,127,0};
 const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntilesgb)};
 
-UINT8 col_tiles_house[] = {1,2,3,27,28,23,24,25,26,4,5,0};
+UINT8 col_tiles_house[] = {1,27,28,23,24,25,26,4,5,0};
 UINT8 col_down_house[] = {126,127,0};
 const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
-extern UINT8* gameover_mod_Data[];
-extern UINT8 current_life;
+const UINT16 bp_gameover[] = {PALETTE_FROM_HEADER(gobpalette)};
+const UINT16 s_gameover[] = {PALETTE_FROM_HEADER(gospalette)};
 
+extern UINT8* gameover_mod_Data[];
+extern INT8 current_life;
+extern BOOLEAN weapon1;
+extern UINT16 lives;
+
+BOOLEAN gameOver;
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
 
@@ -52,26 +61,37 @@ UINT16 ny;
 void Start_StateGame() {
 	UINT8 i;
 	const struct MapInfo* level = levels[current_level];
+	gameOver = FALSE;
 	SPRITES_8x16;
-	SpriteManagerLoad(0);
-	SpriteManagerLoad(1);
-	SpriteManagerLoad(2);
-	SpriteManagerLoad(4);
-	SpriteManagerLoad(6);
-	SpriteManagerLoad(7);
-	SpriteManagerLoad(9);
-	SpriteManagerLoad(10);
+	/*
+0: player
+1: chain
+2: skeleton
+3 :ghost
+4 :explosion
+5: woodspider
+6: viper
+7: enemybullet
+8: wizzard
+9: tinydevil
+10: flyngmen
+11: fireskel
+12: flame
+13: up
+14: bumerang
+15: shooter
+16: eye
+17: land
+18 :stoneman
+19: stone
+20: sword
+21: boleadora
+*/
 	
-	SpriteManagerLoad(13);
-	SpriteManagerLoad(14);
-	SpriteManagerLoad(15);
-	SpriteManagerLoad(16);
-	SpriteManagerLoad(17);
 	SHOW_SPRITES;
 
 	//scroll_target = SpriteManagerAdd(SpritePlayer, 24, 72);
-	OBP0_REG = PAL_DEF(2,0,1,3);
-	OBP1_REG = PAL_DEF(0,0,0,0);
+	
 	BGP_REG = PAL_DEF(0,1,2,3);
 	
 	INIT_FONT(font, PRINT_WIN);
@@ -81,65 +101,116 @@ void Start_StateGame() {
 	InitWindow(0, 0, &window);
 	SHOW_WIN;
 	
+	SpriteManagerLoad(0);
+	SpriteManagerLoad(1);
+	SpriteManagerLoad(4);
+	SpriteManagerLoad(13);
+	SpriteManagerLoad(14);
+	SpriteManagerLoad(20);
+	SpriteManagerLoad(21);
+	
 
 	switch(current_level){
 	
-	case 0:
-		
-		if(last_level == 0){
-			current_life = 4;
-			scroll_target = SpriteManagerAdd(SpritePlayer, 16, 80);
+		case 0:
+			
+			SpriteManagerLoad(2);
+			
+			if(last_level == 0){
+				current_life = 8;
+				lives = 3;
+				weapon1 = FALSE;
+				scroll_target = SpriteManagerAdd(SpritePlayer, 16, 80);
     		
-		}else if(last_level == 1){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 584, 80);
-		}
-		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
-		SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
-		InitScroll(level, col_tiles_town, col_down_town);
-		PlayMusic(gameover_mod_Data, 5, 0);
-		break;
-	case 1:
-		if(last_level == 0){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 32, 224);
-		}else{
-			scroll_target = SpriteManagerAdd(SpritePlayer,128,56);
-		}
-		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
-		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
-		InitScroll(level, col_tiles_house, col_down_house);
+			}else if(last_level == 1){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 584, 80);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+			InitScroll(level, col_tiles_town, col_down_town);
+			PlayMusic(gameover_mod_Data, 5, 0);
 		break;
 
-	case 2:
-		if(last_level == 1){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 56, 96);
-		}else{
-			scroll_target = SpriteManagerAdd(SpritePlayer, 616, 56);
-		}
-		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
-		SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
-		InitScroll(level, col_tiles_town, col_down_town);
+		case 1:
+			SpriteManagerLoad(2);
+			SpriteManagerLoad(7);
+			SpriteManagerLoad(15);
+			SpriteManagerLoad(16);
+			if(last_level == 0){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 32, 224);
+			}else{
+				scroll_target = SpriteManagerAdd(SpritePlayer,128,56);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
+			InitScroll(level, col_tiles_house, col_down_house);
 		break;
 
-	case 3:
-		if(last_level == 2){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 48, 56);
-		}else{
-			scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
-		}
-		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
-		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
-		InitScroll(level, col_tiles_house, col_down_house);
+		case 2:
+			SpriteManagerLoad(7);
+			SpriteManagerLoad(9);
+			SpriteManagerLoad(15);
+			SpriteManagerLoad(17);
+			if(last_level == 1){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 56, 96);
+			}else{
+				scroll_target = SpriteManagerAdd(SpritePlayer, 616, 56);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+			InitScroll(level, col_tiles_town, col_down_town);
 		break;
 
-	case 4:
-		if(last_level == 3){
-			scroll_target = SpriteManagerAdd(SpritePlayer, 32, 56);
-		}else{
-			scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
-		}
-		SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
-		SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
-		InitScroll(level, col_tiles_house, col_down_house);
+		case 3:
+			
+	
+			
+			SpriteManagerLoad(6);
+			SpriteManagerLoad(7);
+	
+		
+			SpriteManagerLoad(15);
+			SpriteManagerLoad(16); 
+		
+			SpriteManagerLoad(18);
+			SpriteManagerLoad(19);
+	
+			if(last_level == 2){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 48, 56);
+			}else{
+				scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
+			InitScroll(level, col_tiles_house, col_down_house);
+		break;
+
+		case 4:
+			SpriteManagerLoad(2);
+			SpriteManagerLoad(17);
+			SpriteManagerLoad(18);
+			SpriteManagerLoad(19);
+			if(last_level == 3){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 32, 56);
+			}else{
+				scroll_target = SpriteManagerAdd(SpritePlayer, 448, 56);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_house1, bank_StateGame);
+			InitScroll(level, col_tiles_house, col_down_house);
+		break;
+		case 5:
+			SpriteManagerLoad(2);
+			SpriteManagerLoad(6);
+			SpriteManagerLoad(7);
+			SpriteManagerLoad(18);
+			SpriteManagerLoad(19);
+			if(last_level == 4){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 40, 40);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+			InitScroll(level, col_tiles_town, col_down_town);
 		break;
 
 /*	case 2:
@@ -158,6 +229,7 @@ void Start_StateGame() {
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
 	//PlayMusic(forest_mod_Data,5,1);
+	
 }
 
 void Update_StateGame() {
@@ -177,11 +249,17 @@ void Update_StateGame() {
 	}
 
 	*/
-	if(KEY_TICKED(J_SELECT)){
+	if(gameOver == TRUE){
+		HIDE_WIN;
+		BGP_REG = PAL_DEF(3,3,3,3);
+		OBP0_REG = PAL_DEF(0,0,0,0);
+		SetPalette(SPRITES_PALETTE, 0, 8, s_gameover, bank_StateGame);
+		SetPalette(BG_PALETTE, 0, 8, bp_gameover, bank_StateGame);
+	}
+
+	if(KEY_TICKED(J_START)){
 		current_level++;	
 		SetState(current_state);
 	}
-	if(KEY_TICKED(J_START)){
-		
-	}
+
 }

@@ -5,16 +5,20 @@
 #include "Scroll.h"
 #include "Math.h"
 #include "Sound.h"
-#include "energy.h"
+#include "hud.h"
 const UINT8 shooter_anim[] = {15,0,0,0,0,0,0,0,1,2,3,4,5,4,5,0};
+
 
 struct ShooterCustomData
 {
     BOOLEAN canShoot;
     INT8 counter;
 };
-extern UINT8 energy;
+
+
+extern UINT16 energy;
 extern INT16 player_x;
+extern BOOLEAN gameOver;
 
 void SShoot(struct ShooterCustomData* data){
     if(data->canShoot == TRUE){
@@ -38,6 +42,10 @@ void Update_SpriteShooter(){
   struct ShooterCustomData* data = (struct ShooterCustomData*)THIS->custom_data;
    UINT8 i;
    struct Sprite* spr;
+    if(gameOver == TRUE){
+        SPRITE_SET_CGB_PALETTE(THIS, 0);
+        SPRITE_SET_DMG_PALETTE(THIS,0);
+    }
 
     if(THIS->x < player_x){    
         SPRITE_UNSET_VMIRROR(THIS);
@@ -55,9 +63,9 @@ void Update_SpriteShooter(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain ) {
+			if(spr->type == SpriteChain || spr->type == SpriteSword ) {
 				if(CheckCollision(THIS, spr)) {
-                    if(spr->anim_frame >=1){
+                    
                         //SkelDeathSound();
 					    SpriteManagerRemove(THIS_IDX);
                         if(energy<=19){
@@ -65,15 +73,15 @@ void Update_SpriteShooter(){
                         }
                         refreshEnergy(energy);
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                    }
+                    
                 }
 			}else if(spr->type == SpriteBumerang ) {
 				if(CheckCollision(THIS, spr)) {
-                    if(spr->anim_frame >=1){
+                    
                         //SkelDeathSound();
 					    SpriteManagerRemove(THIS_IDX);
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                    }
+                    
                 }
 			}
 		}

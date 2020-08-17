@@ -48,7 +48,7 @@ UINT8 tile_collisiontd;
 void Start_SpriteTinyDevil(){
     struct tDevilCustomData* data = (struct tDevilCustomData*)THIS->custom_data;
     SetSpriteAnim(THIS, tdevil_1,9);
-    data->state = 0;
+    data->state = 1;
     THIS->coll_x = 4;
     THIS->coll_y = 3;
     THIS->coll_w = 9;
@@ -145,13 +145,13 @@ void Update_SpriteTinyDevil(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain) {
+			if(spr->type == SpriteChain || spr->type == SpriteSword) {
 				if(CheckCollision(THIS, spr)) {
-                    if(spr->anim_frame >=1){
+                    
 					SpriteManagerRemove(THIS_IDX);
                     SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     PlayFx(CHANNEL_4, 20, 0x3b, 0xd1, 0x79, 0x80);
-                    }
+                    
                 }
 			}
 		}

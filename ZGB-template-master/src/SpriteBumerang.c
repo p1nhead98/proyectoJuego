@@ -43,7 +43,7 @@ void Update_SpriteBumerang(){
     struct bumerangCustomData* data = (struct bumerangCustomData*)THIS->custom_data;
     UINT8 i;
 	struct Sprite* spr;
-    SPRITE_SET_PALETTE(THIS, 0);
+    
     if(data->start){
         bdirection(data);
         data->start=FALSE;
@@ -63,11 +63,11 @@ void Update_SpriteBumerang(){
         if(data->canDest == TRUE){
             if(THIS->y < player_y){
                 
-                    data->b_accel_y+=1;
+                    data->b_accel_y+=2;
                 
             }else{
                
-                    data->b_accel_y-=1;
+                    data->b_accel_y-=2;
                 
             }
         }

@@ -3,6 +3,7 @@
 
 #define STATES \
 _STATE(StateGame)\
+_STATE(StateGameOver)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -24,6 +25,10 @@ _SPRITE_DMG(SpriteBumerang, bumerang)\
 _SPRITE_DMG(SpriteShooter, shooter)\
 _SPRITE_DMG(SpriteEye, eye)\
 _SPRITE_DMG(SpriteLand, land)\
+_SPRITE_DMG(SpriteStoneMan, stoneman)\
+_SPRITE_DMG(SpriteStone, stone)\
+_SPRITE_DMG(SpriteSword, sword)\
+_SPRITE_DMG(SpriteBoleadora, boleadora)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

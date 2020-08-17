@@ -63,11 +63,11 @@ void Update_SpriteViper(){
          SPRITEMANAGER_ITERATE(i, spr) {
 			if(spr->type == SpriteChain) {
 				if(CheckCollision(THIS, spr)) {
-                    if(spr->anim_frame >=1){
+                    
 					SpriteManagerRemove(THIS_IDX);
                     SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     PlayFx(CHANNEL_4, 20, 0x3b, 0xd1, 0x79, 0x80);
-                    }
+                    
                 }
 			}
 		}

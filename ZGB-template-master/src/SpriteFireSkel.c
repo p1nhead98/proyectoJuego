@@ -5,13 +5,13 @@
 #include "Scroll.h"
 #include "Math.h"
 #include "Sound.h"
-#include "energy.h"
+#include "hud.h"
 
 extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 fskel_1[] = {4, 0,1,2,1};
 const UINT8 fskel_2[] = {1, 1};
-extern UINT8 energy;
+extern UINT16 energy;
 struct FSkeletonCustomData
 {
     UINT8 skel_state;

@@ -10,6 +10,7 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 			case 0: *tile = 2;	break;
 			case 1: *tile = 0; break;
 			case 2: *tile = 2; break;
+			case 3: *tile = 0; break;
 		}
 		
 		switch (*tile_ptr){
@@ -24,6 +25,7 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 		case 246: return SpriteShooter; break;
 		case 245: return SpriteEye; break;
 		case 244: return SpriteLand; break;
+		case 243: return SpriteStoneMan; break;
 		}
 
 		*tile = *tile_ptr;

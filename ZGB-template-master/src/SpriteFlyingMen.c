@@ -3,10 +3,10 @@
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "Math.h"
-#include "energy.h"
+#include "hud.h"
 extern INT16 player_x;
 const UINT8 f_men[] = {3, 0,1,2};
-extern UINT8 energy;
+extern UINT16 energy;
 struct fmenCustomData
 {
 

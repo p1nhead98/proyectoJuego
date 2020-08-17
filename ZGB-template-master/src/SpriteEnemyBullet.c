@@ -1,4 +1,4 @@
-#include "Banks/SetBank2.h"
+#include "Banks/SetBank4.h"
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "ZGBMain.h"
@@ -7,7 +7,7 @@
 #include "Sound.h"
 
 const UINT8 bullet_1[] ={2, 0,1};
-
+extern BOOLEAN gameOver;
 void Start_SpriteEnemyBullet(){
     SetSpriteAnim(THIS, bullet_1, 15);
     THIS->coll_x = 2;
@@ -19,6 +19,10 @@ void Update_SpriteEnemyBullet(){
     UINT8 i;
     struct Sprite* spr;
 
+    if(gameOver == TRUE){
+        SPRITE_SET_CGB_PALETTE(THIS, 0);
+        SPRITE_SET_DMG_PALETTE(THIS,0);
+    }
     switch(THIS->unique_id){
         case 1:
             THIS->y++;
@@ -55,9 +59,9 @@ void Update_SpriteEnemyBullet(){
     }
    
     SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpritePlayer) {
+		if(spr->type == SpriteSword) {
 			if(CheckCollision(THIS, spr)) {
-               //SpriteManagerRemove(THIS_IDX);
+               SpriteManagerRemove(THIS_IDX);
             }
 		}
 	}

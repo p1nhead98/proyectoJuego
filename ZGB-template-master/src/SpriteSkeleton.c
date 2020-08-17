@@ -5,14 +5,14 @@
 #include "Scroll.h"
 #include "Math.h"
 #include "Sound.h"
-#include "energy.h"
+#include "hud.h"
 extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 skel_1[] = {1, 0};
 const UINT8 skel_2[] = {6, 0,1,2,3,4,4};
 const UINT8 skel_3[] = {4, 4,5,4,6};
 const UINT8 skel_4[] = {4, 7,8,9,9};
-extern UINT8 energy;
+extern UINT16 energy;
 struct SkeletonCustomData
 {
     UINT8 skel_state;
@@ -90,7 +90,7 @@ void Update_SpriteSkeleton(){
     SPRITEMANAGER_ITERATE(i, spr) {
 			if(spr->type == SpriteChain ) {
 				if(CheckCollision(THIS, spr)) {
-                    if(spr->anim_frame >=1){
+                    
                         SkelDeathSound();
 					    SpriteManagerRemove(THIS_IDX);
                         if(energy<=19){
@@ -98,7 +98,6 @@ void Update_SpriteSkeleton(){
                         }
                         refreshEnergy(energy);
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                    }
                 }
 			}else if(spr->type == SpriteBumerang ) {
 				if(CheckCollision(THIS, spr)) {

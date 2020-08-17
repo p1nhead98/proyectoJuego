@@ -3,13 +3,15 @@
 #include "ZGBMain.h"
 #include "Sound.h"
 #include "Math.h"
-#include "energy.h"
+#include "hud.h"
 
 const UINT8 eye_1[] = {5, 1,1,0,0,0};
 const UINT8 eye_2[] = {5, 0,0,0,0,0};
 const UINT8 eye_3[] = {3,0,0,1};
 const UINT8 eye_4[] = {1,2};
-extern UINT8 energy;
+extern UINT16 energy;
+extern BOOLEAN gameOver;
+
 struct eyeCustomData
 {
     UINT8 state;
@@ -38,7 +40,10 @@ void Update_SpriteEye(){
     struct eyeCustomData* data = (struct eyeCustomData*)THIS->custom_data;
     UINT8 i;
     struct Sprite* spr;
-
+    if(gameOver == TRUE){
+        SPRITE_SET_CGB_PALETTE(THIS, 0);
+        SPRITE_SET_DMG_PALETTE(THIS,7);
+    }
 
 
     switch(data->state){
@@ -124,7 +129,7 @@ void Update_SpriteEye(){
     }
 
      SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain ) {
+			if(spr->type == SpriteChain || spr->type == SpriteSword) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
                         //SkelDeathSound();

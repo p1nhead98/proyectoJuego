@@ -29,6 +29,7 @@ void chainCollisionChange(){
 }
 
 void Start_SpriteChain(){
+    
     SetSpriteAnim(THIS, chain_anim, 15);
 }
 
