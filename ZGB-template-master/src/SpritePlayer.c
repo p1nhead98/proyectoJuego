@@ -7,6 +7,7 @@
 #include "Print.h"
 #include "Palette.h"
 #include "hud.h"
+
 const UINT8 p_anim_walk[] = {4,1,2,1,3};
 const UINT8 p_anim_idle[] = {1,0};
 const UINT8 p_anim_slide[] = {2,4,4};
@@ -265,13 +266,12 @@ void Update_SpritePlayer() {
         if(KEY_TICKED(J_SELECT) && weapon1 == FALSE && player_state != 1 && player_state != 2){
             weapon1 = TRUE;
             RefreshWeapon1(weapon1);
-        
+            
         }else if(KEY_TICKED(J_SELECT) && weapon1 == TRUE  && player_state != 1 && player_state != 2){
             weapon1 = FALSE;
             RefreshWeapon1(weapon1);
         
         }
-    
     
     
   

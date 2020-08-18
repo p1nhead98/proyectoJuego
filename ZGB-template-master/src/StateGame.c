@@ -4,6 +4,7 @@
 
 #include "..\res\src\towntilesgb.h"
 #include "..\res\src\housetiles.h"
+#include "..\res\src\animw.c"
 #include "../res/src/font.h"
 #include "../res/src/window.h"
 #include "../res/src/gobpalette.h"
@@ -42,21 +43,25 @@ extern INT8 current_life;
 extern BOOLEAN weapon1;
 extern UINT16 lives;
 
+UINT8 water;
 BOOLEAN gameOver;
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
-
-
+INT8 x = 0;
+INT8 y = 0;
+UINT8 count = 1;
 //extern UINT8* forest_mod_Data[];
 extern UINT8 current_level;
 extern UINT8 last_level;
 extern const UINT8 num_levels;
 extern const struct MapInfo* levels[];
-
+extern struct TilesInfo anim;
 extern INT16 player_x;
 extern INT16 player_y;
+extern INT8 player_state;
 UINT16 ny;
 
+extern void SetAnimTilesInt();
 
 void Start_StateGame() {
 	UINT8 i;
@@ -109,7 +114,7 @@ void Start_StateGame() {
 	SpriteManagerLoad(20);
 	SpriteManagerLoad(21);
 	
-
+	water=0;
 	switch(current_level){
 	
 		case 0:
@@ -249,6 +254,53 @@ void Update_StateGame() {
 	}
 
 	*/
+	
+
+if(current_level == 0){
+	
+	if(water<=20 ){
+		switch(water){
+			case 1: 
+				set_bkg_data(37,1,w1);
+				break;
+			case 5: 
+				set_bkg_data(37,1,w2);
+				break;
+			case 10: 
+				set_bkg_data(37,1,w3);
+				break;
+			case 15: 
+				set_bkg_data(37,1,w4);
+				break;
+			case 20:
+				water = 0; 
+				break;
+		}
+		
+		water++;
+	}
+	if (--count == 0) {
+			
+		count = 7;	
+		x-- ;
+		AnimateTiles();
+	}
+	
+
+}else if(current_level == 2 ||  current_level ==5){
+	if (--count == 0) {
+			
+		count = 7;	
+		x-- ;
+		AnimateTiles();
+	}
+}
+	if(KEY_TICKED(J_START)){
+		current_level++;	
+		SetState(current_state);
+	}
+	
+
 	if(gameOver == TRUE){
 		HIDE_WIN;
 		BGP_REG = PAL_DEF(3,3,3,3);
@@ -256,10 +308,4 @@ void Update_StateGame() {
 		SetPalette(SPRITES_PALETTE, 0, 8, s_gameover, bank_StateGame);
 		SetPalette(BG_PALETTE, 0, 8, bp_gameover, bank_StateGame);
 	}
-
-	if(KEY_TICKED(J_START)){
-		current_level++;	
-		SetState(current_state);
-	}
-
 }

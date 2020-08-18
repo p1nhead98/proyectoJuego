@@ -72,9 +72,9 @@ void Update_SpriteStone(){
         case 1:
             SetSpriteAnim(THIS, stone_1, 10);
             if(SPRITE_GET_VMIRROR(THIS)){
-                TranslateSprite(THIS, -1, 0);
+                TranslateSprite(THIS, -1 << delta_time, 0);
             }else{
-                TranslateSprite(THIS, 1, 0);
+                TranslateSprite(THIS, 1 << delta_time, 0);
             }
 
 
@@ -87,7 +87,7 @@ void Update_SpriteStone(){
 	        if(!tile_collisionstone && delta_time != 0 && data->accel_y < 40  ) { //Do another iteration if there is no collision
 		        data->accel_y += 4 >> delta_time;
             
-		        tile_collisionstone = TranslateSprite(THIS, 0, (data->accel_y >> 4));
+		        tile_collisionstone = TranslateSprite(THIS, 0, (data->accel_y >> 4 ));
 	        }
 	            if(tile_collisionstone && !TranslateSprite(THIS,0,(data->accel_y >> (-4 << delta_time)))) {
               

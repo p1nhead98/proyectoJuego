@@ -23,15 +23,15 @@ void SkelDeathSound(){
 }
 void SkeletonMove(){
      if(SPRITE_GET_VMIRROR(THIS)) {
-    	        if(TranslateSprite(THIS, -1, 0)) {
+    	        if(TranslateSprite(THIS, -1 << delta_time, 0)) {
 			        SPRITE_UNSET_VMIRROR(THIS);
-		        } else	if(!scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x) >> 3), (THIS->y >> 3) + 2u)]) {
+		        } else	if( !scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x) >> 3), (THIS->y >> 3) + 2u)]  && !scroll_collisions_down[GetScrollTile(((THIS->x + THIS->coll_x) >> 3), (THIS->y >> 3) + 2u)]) {
 			        SPRITE_UNSET_VMIRROR(THIS);
 		        }
 	        }else {
-		        if(TranslateSprite(THIS, +1, 0)) {
+		        if(TranslateSprite(THIS, +1 << delta_time, 0)) {
 			        SPRITE_SET_VMIRROR(THIS);
-		        }else if(!scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x + THIS->coll_w) >> 3), (THIS->y >> 3) + 2u)]) {
+		        }else if(  !scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x + THIS->coll_w) >> 3), (THIS->y >> 3) + 2u)] && !scroll_collisions_down[GetScrollTile(((THIS->x + THIS->coll_x + THIS->coll_w) >> 3), (THIS->y >> 3) + 2u)] ) {
 			        SPRITE_SET_VMIRROR(THIS);
 		        }
 	        }

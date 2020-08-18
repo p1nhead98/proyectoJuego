@@ -27,13 +27,13 @@ struct StoneManCustomData
 void StoneManMove(){
 
     if(SPRITE_GET_VMIRROR(THIS)) {
-    	        if(TranslateSprite(THIS, -5, 0)) {
+    	        if(TranslateSprite(THIS, -5 << delta_time, 0)) {
 			        SPRITE_UNSET_VMIRROR(THIS);
 		        } else	if(!scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x) >> 3), (THIS->y >> 3) + 2u)]) {
 			        SPRITE_UNSET_VMIRROR(THIS);
 		        }
 	        }else {
-		        if(TranslateSprite(THIS, +5, 0)) {
+		        if(TranslateSprite(THIS, +5 << delta_time, 0)) {
 			        SPRITE_SET_VMIRROR(THIS);
 		        }else if(!scroll_collisions[GetScrollTile(((THIS->x + THIS->coll_x + THIS->coll_w) >> 3), (THIS->y >> 3) + 2u)]) {
 			        SPRITE_SET_VMIRROR(THIS);
