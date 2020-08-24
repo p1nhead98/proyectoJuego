@@ -8,20 +8,24 @@
 #include "Palette.h"
 #include "hud.h"
 
-const UINT8 p_anim_walk[] = {4,1,2,1,3};
-const UINT8 p_anim_idle[] = {1,0};
-const UINT8 p_anim_slide[] = {2,4,4};
-const UINT8 p_anim_jump[] = {1,5};
-const UINT8 p_anim_attack[] = {4,6,6,7,7}; // chain attack anim
+
+
+
+const UINT8 p_anim_idle[] = {5,0,0,0,0,1};
+const UINT8 p_anim_walk[] = {4,4,5,6,5};
+const UINT8 p_anim_slide[] = {2,7,7};
+const UINT8 p_anim_jump[] = {1,2};
+const UINT8 p_anim_attack[] = {4,8,8,9,9}; // chain attack anim
 const UINT8 p_anim_attack2[] = {4,12,12,13,13}; // sword attack anim
-const UINT8 p_anim_attack3[] = {3,6,7,7};// boleadora attack anim
-const UINT8 p_anim_ladders[] = {2,8,8};
-const UINT8 p_anim_hit[] = {4,9,9,9,9};
-const UINT8 p_anim_fall[] = {1,10};
+const UINT8 p_anim_attack3[] = {3,8,9,9};// boleadora attack anim
+const UINT8 p_anim_ladders[] = {2,10,10};
+const UINT8 p_anim_hit[] = {4,11,11,11,11};
+const UINT8 p_anim_fall[] = {1,3};
 
 INT16 player_accel_y;
 struct Sprite* sprite_player = 0;
 struct Sprite* player_parent = 0;
+
 UINT8 tile_collision;
 INT8 player_state;
 
@@ -99,10 +103,14 @@ void pHit(){
 void hit(BOOLEAN dir){
     SetSpriteAnim(THIS, p_anim_hit, 20);
     if(dir == FALSE){
-        TranslateSprite(THIS, -1, 0);
+        if(THIS->x > 0 ){
+            TranslateSprite(THIS, -1, 0);
+        }
         SPRITE_UNSET_VMIRROR(THIS);
     }else{
-        TranslateSprite(THIS, 1, 0);
+        if(THIS->x < (scroll_w-15)){
+            TranslateSprite(THIS, 1, 0);
+        }
         SPRITE_SET_VMIRROR(THIS);
     }
     if(THIS->anim_frame==3){
@@ -173,6 +181,7 @@ void slide(){
     playerCollisions();
     if(player_state == 4){
         SetSpriteAnim(THIS, p_anim_slide, 7);
+        if(THIS->x > 1 && THIS->x < (scroll_w-15))
         if(SPRITE_GET_VMIRROR(THIS)){
             TranslateSprite(THIS,-2,0);
         }else{
@@ -205,13 +214,13 @@ void attack1(){
 }
 
 void PlayerMovement(){
-    if(KEY_PRESSED(J_RIGHT)){
+    if(KEY_PRESSED(J_RIGHT) && THIS->x < (scroll_w-15)){
         TranslateSprite(THIS,1,0);
         if(player_state != 2){
             SPRITE_UNSET_VMIRROR(THIS);
         }
     }
-    if(KEY_PRESSED(J_LEFT)){
+    if(KEY_PRESSED(J_LEFT) && THIS->x > 0){
         TranslateSprite(THIS,-1,0);
         if(player_state != 2){
             SPRITE_SET_VMIRROR(THIS);
@@ -280,23 +289,26 @@ void Update_SpritePlayer() {
         if(canEnter == TRUE && KEY_TICKED(J_UP)){
             if(current_level == 0){
                 last_level = current_level;
-                current_level++;
                 SetState(current_state); 
+                current_level++;
+                
             }else{
                 last_level = current_level;
+                SetState(current_state);
                 if(THIS->x < 100){
                     current_level--;
                 }else{
                     current_level++;
                 }
-                SetState(current_state);
+                
             }
         }   
 
-        if(current_level == 5 && THIS->x == 640){
+        if(current_level == 5 && THIS->x == scroll_w-15){
+            current_level++;
             SetState(current_state);
         }
-
+       
         //Estados del player
         switch(player_state){
             case 0://Quieto
@@ -304,9 +316,10 @@ void Update_SpritePlayer() {
                 ladders();
 
                 if(KEY_PRESSED(J_LEFT) || KEY_PRESSED(J_RIGHT)){  // Asigna la animacion de correr
-                    SetSpriteAnim(THIS,p_anim_walk,9); 
+                    SetSpriteAnim(THIS,p_anim_walk,9);
+
                 }else{
-                    SetSpriteAnim(THIS,p_anim_idle,15);
+                    SetSpriteAnim(THIS,p_anim_idle,4);
                 }
             
                 if(KEY_TICKED(J_A) && !KEY_PRESSED(J_DOWN)){ //salto
@@ -528,7 +541,7 @@ void Update_SpritePlayer() {
         SPRITEMANAGER_ITERATE(i, spr) {
         
 		    if(spr->type != SpriteChain && spr->type != SpriteSword && spr->type != SpriteLand && spr->type != SpriteExplosion && spr->type != SpriteBumerang && 
-            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp) {
+            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm) {
 			    if(CheckCollision(THIS, spr)) {
                     if(player_state != 6 && inmu == FALSE){
                         if(THIS->x < spr->x){
@@ -545,7 +558,27 @@ void Update_SpritePlayer() {
                     }
                 }
 		    }
-
+            if(spr->type == SpriteBoss1Arm ){
+                if(CheckCollision(THIS,spr)  && THIS->y > spr->y ){
+                    if(player_state != 6 && inmu == FALSE){
+                        if(THIS->x < spr->x){
+                            hit_dir = FALSE;
+                        }else{
+                            hit_dir = TRUE;
+                        }
+                        current_life = current_life - 2;
+                        player_state = 6;
+                    }
+                }else if(CheckCollision(THIS,spr) && player_accel_y > 15 ){         
+                    if(THIS->y + 4 < spr->y){
+                        THIS->y = spr->y-15;
+                        player_accel_y = 15;
+                        if(player_state == 3){
+                            player_state= 0;
+                        }   
+                    }
+                }
+            }
             if(spr->type == SpriteLand ){
                 if(CheckCollision(THIS,spr) && player_accel_y > 15 ){         
                     if(THIS->y + 4 < spr->y){

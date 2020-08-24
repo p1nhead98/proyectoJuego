@@ -29,6 +29,9 @@ _SPRITE_DMG(SpriteStoneMan, stoneman)\
 _SPRITE_DMG(SpriteStone, stone)\
 _SPRITE_DMG(SpriteSword, sword)\
 _SPRITE_DMG(SpriteBoleadora, boleadora)\
+_SPRITE_DMG(SpriteSkelBoss, skelboss)\
+_SPRITE_DMG(SpriteBoss1Arm, boss1arm)\
+_SPRITE_DMG(SpriteSparkBall, sparkball)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

@@ -5,7 +5,7 @@
 #include "Math.h"
 #include "Scroll.h"
 
-const UINT8 bole_anim2[] = {4,1,3,2,3};
+const UINT8 bole_anim2[] = {4,0,0,0,0};
 extern INT16 player_x;
 extern INT16 player_y;
 
@@ -38,7 +38,7 @@ void Update_SpriteBoleadora(){
     UINT8 i;
 	struct Sprite* spr;
     SPRITE_SET_CGB_PALETTE(THIS, 3);
-  
+    SPRITE_SET_DMG_PALETTE(THIS, 0);
 
        
             SetSpriteAnim(THIS,bole_anim2,15);
@@ -51,11 +51,11 @@ void Update_SpriteBoleadora(){
         
        
             THIS->x = THIS->x + (data->b_accel_x );
-            if(SPRITE_GET_VMIRROR(THIS)){
+            /*if(SPRITE_GET_VMIRROR(THIS)){
                 DrawFrame(FRAME_8x16, THIS->first_tile , THIS->x - scroll_x - 8 , THIS->y - scroll_y , THIS->flags);
             }else{
                 DrawFrame(FRAME_8x16, THIS->first_tile , THIS->x - scroll_x + 8 , THIS->y - scroll_y , THIS->flags);
-            }
+            }*/
     
 
 

@@ -6,10 +6,10 @@
 #include "print.h"
 void refreshEnergy(UINT8 energy){
     
-    PRINT_POS(16, 1);
-    Printf("S:%d", (UINT16)(energy));
+    PRINT_POS(14, 1);
+    Printf("%d", (UINT16)(energy));
     if(energy < 10){
-        DPRINT(19,1," ");
+        DPRINT(15,1," ");
     }
 }
 

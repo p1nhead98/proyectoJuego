@@ -37,9 +37,9 @@ void Update_SpriteLand(){
             if(data->count < 21){
                 data->count++;
                 if(data->count % 2 == 0){
-                    THIS->x = THIS-> x + 1;
+                    THIS->x = THIS-> x + 2;
                 }else{
-                    THIS->x = THIS-> x - 1;
+                    THIS->x = THIS-> x - 2;
                 }
                 if(data->count == 20){
                     data->state = 2;

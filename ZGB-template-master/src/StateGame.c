@@ -4,11 +4,12 @@
 
 #include "..\res\src\towntilesgb.h"
 #include "..\res\src\housetiles.h"
-#include "..\res\src\animw.c"
+#include "..\res\src\boss1.h"
 #include "../res/src/font.h"
 #include "../res/src/window.h"
 #include "../res/src/gobpalette.h"
 #include "../res/src/gospalette.h"
+
 
 #include <gb/gb.h> 
 #include "main.h"
@@ -38,6 +39,8 @@ const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 const UINT16 bp_gameover[] = {PALETTE_FROM_HEADER(gobpalette)};
 const UINT16 s_gameover[] = {PALETTE_FROM_HEADER(gospalette)};
 
+UINT8 col_tiles_town2[] = {3,4,5,6,0};
+
 extern UINT8* gameover_mod_Data[];
 extern INT8 current_life;
 extern BOOLEAN weapon1;
@@ -48,7 +51,7 @@ BOOLEAN gameOver;
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
 INT8 x = 0;
-INT8 y = 0;
+INT8 x2 = 0;
 UINT8 count = 1;
 //extern UINT8* forest_mod_Data[];
 extern UINT8 current_level;
@@ -61,7 +64,7 @@ extern INT16 player_y;
 extern INT8 player_state;
 UINT16 ny;
 
-extern void SetAnimTilesInt();
+
 
 void Start_StateGame() {
 	UINT8 i;
@@ -90,7 +93,10 @@ void Start_StateGame() {
 18 :stoneman
 19: stone
 20: sword
-21: boleadora
+21: knife
+22: SkelBoss
+23: boss1arm
+24: sparkball
 */
 	
 	SHOW_SPRITES;
@@ -105,7 +111,7 @@ void Start_StateGame() {
 	scroll_h_border = 2 << 3;
 	InitWindow(0, 0, &window);
 	SHOW_WIN;
-	
+	x=0,x2=0;
 	SpriteManagerLoad(0);
 	SpriteManagerLoad(1);
 	SpriteManagerLoad(4);
@@ -114,7 +120,7 @@ void Start_StateGame() {
 	SpriteManagerLoad(20);
 	SpriteManagerLoad(21);
 	
-	water=0;
+	
 	switch(current_level){
 	
 		case 0:
@@ -217,6 +223,19 @@ void Start_StateGame() {
 			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
 			InitScroll(level, col_tiles_town, col_down_town);
 		break;
+		case 6:
+			
+			SpriteManagerLoad(22);
+			SpriteManagerLoad(23);
+			SpriteManagerLoad(24);
+			if(last_level == 4){
+				scroll_target = SpriteManagerAdd(SpritePlayer, 40, 40);
+			}
+			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+			InitScroll(level, col_tiles_town2, col_down_town);
+		break;
+		break;
 
 /*	case 2:
 		MoveScroll(20, 568);
@@ -256,45 +275,22 @@ void Update_StateGame() {
 	*/
 	
 
-if(current_level == 0){
-	
-	if(water<=20 ){
-		switch(water){
-			case 1: 
-				set_bkg_data(37,1,w1);
-				break;
-			case 5: 
-				set_bkg_data(37,1,w2);
-				break;
-			case 10: 
-				set_bkg_data(37,1,w3);
-				break;
-			case 15: 
-				set_bkg_data(37,1,w4);
-				break;
-			case 20:
-				water = 0; 
-				break;
+	if(current_level == 0){
+		if (--count == 0) {	
+			count = 4;	
+			x-- ;
+			x2++;
+			AnimateTiles_stage1();
 		}
-		
-		water++;
+	}else if(current_level == 2 ||  current_level ==5){
+		if (--count == 0) {	
+			count = 7;	
+			x-- ;
+			AnimateTiles_stage1();
+		}	
 	}
-	if (--count == 0) {
-			
-		count = 7;	
-		x-- ;
-		AnimateTiles();
-	}
-	
 
-}else if(current_level == 2 ||  current_level ==5){
-	if (--count == 0) {
-			
-		count = 7;	
-		x-- ;
-		AnimateTiles();
-	}
-}
+
 	if(KEY_TICKED(J_START)){
 		current_level++;	
 		SetState(current_state);
