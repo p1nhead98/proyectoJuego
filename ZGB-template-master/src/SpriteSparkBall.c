@@ -61,6 +61,7 @@ void Update_SpriteSparkBall(){
     }
     if(data->counter == 3){
             SpriteManagerRemove(THIS_IDX);
+            SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
             armAttack = TRUE;
         }
     DrawFrame(FRAME_8x16, THIS->frame, THIS->x - scroll_x + 8 , THIS->y - scroll_y ,  32);

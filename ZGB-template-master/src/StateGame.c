@@ -9,7 +9,7 @@
 #include "../res/src/window.h"
 #include "../res/src/gobpalette.h"
 #include "../res/src/gospalette.h"
-
+#include "../res/src/skelboss.h"
 
 #include <gb/gb.h> 
 #include "main.h"
@@ -38,6 +38,8 @@ const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
 const UINT16 bp_gameover[] = {PALETTE_FROM_HEADER(gobpalette)};
 const UINT16 s_gameover[] = {PALETTE_FROM_HEADER(gospalette)};
+
+const UINT16 s_boss1[] = {PALETTE_FROM_HEADER(skelboss)};
 
 UINT8 col_tiles_town2[] = {3,4,5,6,0};
 
@@ -229,9 +231,9 @@ void Start_StateGame() {
 			SpriteManagerLoad(23);
 			SpriteManagerLoad(24);
 			if(last_level == 4){
-				scroll_target = SpriteManagerAdd(SpritePlayer, 40, 40);
+				scroll_target = SpriteManagerAdd(SpritePlayer, 9, 128);
 			}
-			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
+			SetPalette(SPRITES_PALETTE, 0, 8, s_boss1, bank_StateGame);
 			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
 			InitScroll(level, col_tiles_town2, col_down_town);
 		break;
