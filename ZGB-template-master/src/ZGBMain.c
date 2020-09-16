@@ -1,7 +1,7 @@
 #include "ZGBMain.h"
 #include "Math.h"
 
-UINT8 next_state = StateGame;
+UINT8 next_state = StateTitleScreen;
 extern UINT8 current_level;
 
 UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
@@ -12,6 +12,7 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 			case 2: *tile = 2; break;
 			case 3: *tile = 0; break;
 			case 6: *tile = 1; break;
+			default: *tile = 0; break;
 		}
 		
 		switch (*tile_ptr){
@@ -28,8 +29,18 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 		case 244: return SpriteLand; break;
 		case 243: return SpriteStoneMan; break;
 		case 242: return SpriteSkelBoss; break;
+		case 241: return SpriteTitleFace; break;
 		}
 
+		*tile = *tile_ptr;
+	}else if (current_state == StateTitleScreen){
+			*tile = 90 ; 
+
+
+			switch (*tile_ptr){
+		
+		case 254: return SpriteTitleFace; break;
+		}
 		*tile = *tile_ptr;
 	}
 

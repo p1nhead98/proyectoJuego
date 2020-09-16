@@ -99,7 +99,7 @@ void Update_SpriteSkeleton(){
                         refreshEnergy(energy);
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                 }
-			}else if(spr->type == SpriteBumerang ) {
+			}else if(spr->type == SpriteBumerang ||spr->type == SpriteGuadana) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
                         SkelDeathSound();

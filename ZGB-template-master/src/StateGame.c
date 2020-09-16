@@ -32,7 +32,7 @@ UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,78,79,80,81,82,83,84,0};
 UINT8 col_down_town[] = {126,127,0};
 const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntilesgb)};
 
-UINT8 col_tiles_house[] = {1,27,28,23,24,25,26,4,5,0};
+UINT8 col_tiles_house[] = {1,27,28,23,24,25,26,33,34,4,5,0};
 UINT8 col_down_house[] = {126,127,0};
 const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
@@ -133,15 +133,15 @@ void Start_StateGame() {
 				current_life = 8;
 				lives = 3;
 				weapon1 = FALSE;
-				scroll_target = SpriteManagerAdd(SpritePlayer, 16, 80);
+				scroll_target = SpriteManagerAdd(SpritePlayer, 16, 95);
     		
 			}else if(last_level == 1){
-				scroll_target = SpriteManagerAdd(SpritePlayer, 584, 80);
+				scroll_target = SpriteManagerAdd(SpritePlayer, 624, 95);
 			}
 			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
 			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
 			InitScroll(level, col_tiles_town, col_down_town);
-			PlayMusic(gameover_mod_Data, 5, 0);
+			//PlayMusic(gameover_mod_Data, 5, 0);
 		break;
 
 		case 1:
@@ -150,7 +150,7 @@ void Start_StateGame() {
 			SpriteManagerLoad(15);
 			SpriteManagerLoad(16);
 			if(last_level == 0){
-				scroll_target = SpriteManagerAdd(SpritePlayer, 32, 224);
+				scroll_target = SpriteManagerAdd(SpritePlayer, 26, 224);
 			}else{
 				scroll_target = SpriteManagerAdd(SpritePlayer,128,56);
 			}

@@ -63,7 +63,7 @@ void Update_SpriteShooter(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain || spr->type == SpriteSword ) {
+			if(spr->type == SpriteChain  ) {
 				if(CheckCollision(THIS, spr)) {
                     
                         //SkelDeathSound();

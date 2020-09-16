@@ -59,11 +59,7 @@ void Update_SpriteEnemyBullet(){
     }
    
     SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpriteSword) {
-			if(CheckCollision(THIS, spr)) {
-               SpriteManagerRemove(THIS_IDX);
-            }
-		}
+		
 	}
 }
 void Destroy_SpriteEnemyBullet(){

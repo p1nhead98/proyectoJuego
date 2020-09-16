@@ -160,8 +160,13 @@ void colisiones(){
             } 
             break;
         case 124u:
-            lives--;
-            SetState(current_state);
+            if(lives>=1){
+                SetState(current_state);
+                lives--;
+                current_life = max_life;
+            }else{
+                gameOver = TRUE;
+            }
             break;
     }
     if(colision != 123u && canEnter == TRUE){
@@ -178,6 +183,7 @@ void jump(){
 }
 
 void slide(){
+    UINT8 colision = GetScrollTile(((THIS->x + THIS->coll_x) + 4 ) >> 3, (THIS ->y - 15u) >> 3);
     playerCollisions();
     if(player_state == 4){
         SetSpriteAnim(THIS, p_anim_slide, 7);
@@ -190,7 +196,7 @@ void slide(){
         if(THIS->anim_frame == 1){
             player_state = 3;
             playerCollisions();
-        }    
+        }
     }
 }
 
@@ -198,14 +204,11 @@ void attack(BOOLEAN attack){
     if(attack == FALSE){
         struct Sprite* sprite_chain = SpriteManagerAdd(SpriteChain,THIS->x,THIS->y);
         sprite_chain->flags = THIS->flags;
-    }else{
-        struct Sprite* sprite_sword = SpriteManagerAdd(SpriteSword, THIS->x, THIS->y);
-        sprite_sword->flags = THIS->flags;
     }
 }
 
 void attack1(){
-    struct Sprite* sprite_bumerang = SpriteManagerAdd(SpriteBoleadora,THIS->x,THIS->y);
+    struct Sprite* sprite_bumerang = SpriteManagerAdd(SpriteBumerang,THIS->x,THIS->y);
     if(SPRITE_GET_VMIRROR(THIS)){
         sprite_bumerang->flags = 32;
     }else{
@@ -258,7 +261,7 @@ void Start_SpritePlayer() {
     playerCollisions();
     RefreshLife();
     refreshLives(lives);
-    RefreshWeapon1(weapon1);
+    //RefreshWeapon1(weapon1);
     refreshEnergy(energy);
     canEnter = FALSE;
     inmunity = 0;
@@ -271,7 +274,7 @@ void Update_SpritePlayer() {
 
     if(gameOver == FALSE){
         colisiones();
-
+        /*
         if(KEY_TICKED(J_SELECT) && weapon1 == FALSE && player_state != 1 && player_state != 2){
             weapon1 = TRUE;
             RefreshWeapon1(weapon1);
@@ -281,7 +284,7 @@ void Update_SpritePlayer() {
             RefreshWeapon1(weapon1);
         
         }
-    
+        */
     
   
     
@@ -540,7 +543,7 @@ void Update_SpritePlayer() {
 
         SPRITEMANAGER_ITERATE(i, spr) {
         
-		    if(spr->type != SpriteChain && spr->type != SpriteSword && spr->type != SpriteLand && spr->type != SpriteExplosion && spr->type != SpriteBumerang && 
+		    if(spr->type != SpriteChain && spr->type != SpriteGuadana && spr->type != SpriteLand && spr->type != SpriteExplosion && spr->type != SpriteBumerang && 
             spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm) {
 			    if(CheckCollision(THIS, spr)) {
                     if(player_state != 6 && inmu == FALSE){

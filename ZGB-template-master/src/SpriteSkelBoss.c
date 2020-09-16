@@ -110,7 +110,7 @@ void Update_SpriteSkelBoss(){
     }
     
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain || spr->type == SpriteSword) {
+			if(spr->type == SpriteChain || spr->type == SpriteGuadana) {
 				if(CheckCollision(THIS, spr)) {
                     
                         if(data->live >0 && data->canHurt == FALSE){

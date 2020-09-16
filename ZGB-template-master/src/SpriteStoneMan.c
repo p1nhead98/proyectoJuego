@@ -119,15 +119,13 @@ void Update_SpriteStoneMan(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain || spr->type == SpriteSword) {
+			if(spr->type == SpriteChain ) {
 				if(CheckCollision(THIS, spr)) {
                     
                         if(data->lives >0 && data->canHurt == FALSE){
                             data->canHurt = TRUE;
                             if(spr->type == SpriteChain){
                                 data->lives = data->lives - 2;
-                            }else if(spr->type == SpriteSword){
-                                data->lives = data->lives - 1;
                             }
                             data->state = 2;
                             

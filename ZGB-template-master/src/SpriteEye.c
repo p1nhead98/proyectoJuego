@@ -129,7 +129,7 @@ void Update_SpriteEye(){
     }
 
      SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain || spr->type == SpriteSword) {
+			if(spr->type == SpriteChain ) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
                         //SkelDeathSound();

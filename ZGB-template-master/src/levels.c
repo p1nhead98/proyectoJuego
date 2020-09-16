@@ -22,3 +22,5 @@ const struct MapInfo* levels[] = {
 UINT8 current_level = 0;
 UINT8 last_level = 0;
 const UINT8 num_levels = 4;
+UINT8 last_state;
+UINT8 etapa = 0;

@@ -4,6 +4,8 @@
 #define STATES \
 _STATE(StateGame)\
 _STATE(StateGameOver)\
+_STATE(StateTitleScreen)\
+_STATE(StateSplashScreen)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -27,11 +29,12 @@ _SPRITE_DMG(SpriteEye, eye)\
 _SPRITE_DMG(SpriteLand, land)\
 _SPRITE_DMG(SpriteStoneMan, stoneman)\
 _SPRITE_DMG(SpriteStone, stone)\
-_SPRITE_DMG(SpriteSword, sword)\
+_SPRITE_DMG(SpriteGuadana, guadana)\
 _SPRITE_DMG(SpriteBoleadora, boleadora)\
 _SPRITE_DMG(SpriteSkelBoss, skelboss)\
 _SPRITE_DMG(SpriteBoss1Arm, boss1arm)\
 _SPRITE_DMG(SpriteSparkBall, sparkball)\
+_SPRITE_DMG(SpriteTitleFace, titleFace)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
