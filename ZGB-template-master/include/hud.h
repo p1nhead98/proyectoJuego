@@ -23,7 +23,7 @@ void refreshLives(UINT16 lives){
         DPRINT(19,2," ");
     }
 }
-void RefreshWeapon1(BOOLEAN weapon);
+void RefreshWeapon(INT8 weapon);
 
 
 #endif

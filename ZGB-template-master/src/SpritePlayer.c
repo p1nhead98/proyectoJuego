@@ -16,7 +16,7 @@ const UINT8 p_anim_walk[] = {4,4,5,6,5};
 const UINT8 p_anim_slide[] = {2,7,7};
 const UINT8 p_anim_jump[] = {1,2};
 const UINT8 p_anim_attack[] = {4,8,8,9,9}; // chain attack anim
-const UINT8 p_anim_attack2[] = {4,12,12,13,13}; // sword attack anim
+const UINT8 p_anim_death[] = {4,12,13,13,13}; // death anim
 const UINT8 p_anim_attack3[] = {3,8,9,9};// boleadora attack anim
 const UINT8 p_anim_ladders[] = {2,10,10};
 const UINT8 p_anim_hit[] = {4,11,11,11,11};
@@ -36,7 +36,7 @@ UINT16 goCounter;
 BOOLEAN canEnter;
 BOOLEAN hit_dir; 
 INT16 inmunity = 0;
-BOOLEAN weapon1;
+extern UINT8 currentSubWeapon;
 extern const UINT8 max_life;
 INT8 current_life;
 
@@ -49,45 +49,14 @@ extern BOOLEAN gameOver;
 
 
 
-const UINT8 HEART_TILE = 122;
-const UINT8 HEART_TILE2 = 98;
-const UINT8 EMPTY_HEART_TILE = 121;
 
-void RefreshLife() {
-	UINT8 i;
-    UINT8 last_tile;
-    if(current_life !=0 ){
-        DPRINT(2, 0, "LIFE");
-        last_tile = (current_life+1) / 2 ;
-        for(i=0; i != (max_life / 2); ++i) {
-		    set_win_tiles(1 + i, 1, 1, 1, &EMPTY_HEART_TILE);
-	    }
-        if(current_life% 2 == 0){
-	        for(i = 0; i != (current_life / 2) ; ++i) {
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE);
-            }
-            for(; i != (max_life / 2); ++i) {
-		        set_win_tiles(1 + i, 1, 1, 1, &EMPTY_HEART_TILE);
-	        }
-        }else{
-            for(i = 0; i != ((current_life - 1) / 2) ; ++i) {
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE);
-	        }
-            if(i == ((current_life-1)/2)){
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE2);
-            }
-        
-        }
-    }
-}
 
 void pHit(){
     if(inmunity == 0) {
 			if(current_life <= 0) {
                 if(lives>=1){
-                    SetState(current_state);
-                    lives--;
-                    current_life = max_life;
+                    player_state = 9;
+                    
                 }else{
                     gameOver = TRUE;
                 }
@@ -200,15 +169,26 @@ void slide(){
     }
 }
 
-void attack(BOOLEAN attack){
-    if(attack == FALSE){
+void attack(){
+    
         struct Sprite* sprite_chain = SpriteManagerAdd(SpriteChain,THIS->x,THIS->y);
         sprite_chain->flags = THIS->flags;
-    }
+    
 }
 
 void attack1(){
-    struct Sprite* sprite_bumerang = SpriteManagerAdd(SpriteBumerang,THIS->x,THIS->y);
+    struct Sprite* sprite_bumerang;
+    switch(currentSubWeapon){
+        case 3:
+            sprite_bumerang = SpriteManagerAdd(SpriteShield,THIS->x ,THIS->y - 9);
+        break;
+        case 0:
+             sprite_bumerang = SpriteManagerAdd(SpriteBoleadora,THIS->x,THIS->y);
+        break;
+        case 1:
+             sprite_bumerang = SpriteManagerAdd(SpriteGuadana,THIS->x,THIS->y);
+        break;
+    }
     if(SPRITE_GET_VMIRROR(THIS)){
         sprite_bumerang->flags = 32;
     }else{
@@ -266,6 +246,7 @@ void Start_SpritePlayer() {
     canEnter = FALSE;
     inmunity = 0;
     goCounter = 0;
+    
 }
 
 void Update_SpritePlayer() {
@@ -286,7 +267,19 @@ void Update_SpritePlayer() {
         }
         */
     
-  
+       if(KEY_TICKED(J_SELECT) && currentSubWeapon == 0){
+            
+            currentSubWeapon++;
+            PRINT_POS(17, 0);
+            Printf(":%d", (UINT16)(currentSubWeapon));
+            RefreshWeapon(currentSubWeapon);
+       }else if(KEY_TICKED(J_SELECT) && currentSubWeapon == 1){
+            
+            currentSubWeapon = 0;
+            PRINT_POS(17, 0);
+            Printf(":%d", (UINT16)(currentSubWeapon));
+            RefreshWeapon(currentSubWeapon);
+       }
     
         // Chequea si esta sobre una puerta y se presiona "up", asi asignar el valor del level a cual se ira
         if(canEnter == TRUE && KEY_TICKED(J_UP)){
@@ -335,14 +328,14 @@ void Update_SpritePlayer() {
                 if(KEY_TICKED(J_B) && !KEY_TICKED(J_A) && !KEY_PRESSED(J_UP)){ // main weapon attack idle
                     PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
                     player_state = 1;
-                    attack(weapon1);
+                    attack();
                     //SpriteManagerAdd(SpriteChain,THIS->x,THIS->y);
                 }   
             
                 if(KEY_TICKED(J_B) && KEY_TICKED(J_A) && !KEY_PRESSED(J_UP)){ // main weapon attack jumping
                     PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
                     player_state = 2;
-                    attack(weapon1);
+                    attack();
                 }
 
                 if(KEY_PRESSED(J_UP) && KEY_TICKED(J_B) && !KEY_TICKED(J_A)){ // sub weapon idle attack
@@ -366,10 +359,9 @@ void Update_SpritePlayer() {
             break;
         
             case 1: // Ataque quieto del arma principal
-                if(weapon1 == FALSE){
+                
                     SetSpriteAnim(THIS,p_anim_attack,15);
-                }else{
-                    SetSpriteAnim(THIS,p_anim_attack2,17);
+                
                     /* if(THIS->anim_frame >= 2){
                         player_accel_y = 0;
                         if(SPRITE_GET_VMIRROR(THIS)){
@@ -378,7 +370,7 @@ void Update_SpritePlayer() {
                             TranslateSprite(THIS,2,0);
                         }
                     } */
-                }
+                
             
                 if(THIS->anim_frame == 3){
                     if(player_state == 2){
@@ -390,11 +382,9 @@ void Update_SpritePlayer() {
             break;
 
             case 2: // Ataque saltando del arma principal
-                if(weapon1 == FALSE){
+               
                     SetSpriteAnim(THIS,p_anim_attack,15);
-                }else{
-                    SetSpriteAnim(THIS,p_anim_attack2,17);
-                }
+                
 
                 PlayerMovement();        
                 if(THIS->anim_frame == 3){
@@ -416,7 +406,7 @@ void Update_SpritePlayer() {
                 }
                 if(KEY_TICKED(J_B) && !KEY_PRESSED(J_UP)){ //Ataque de arma primaria saltando
                     PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
-                    attack(weapon1);
+                    attack();
                     player_state = 2;
                 }
                 if(KEY_PRESSED(J_UP) && KEY_TICKED(J_B)){ // Ataque de arma secundaria saltando
@@ -507,6 +497,17 @@ void Update_SpritePlayer() {
                     }   
                 }
             break;
+
+            case 9: // death
+            SetSpriteAnim(THIS, p_anim_death, 5);
+            if(THIS->anim_frame == 3 ){
+                SetState(current_state);
+                current_life = max_life;
+                lives--;
+                
+
+            }
+            break;
         }   
 
 
@@ -544,9 +545,9 @@ void Update_SpritePlayer() {
         SPRITEMANAGER_ITERATE(i, spr) {
         
 		    if(spr->type != SpriteChain && spr->type != SpriteGuadana && spr->type != SpriteLand && spr->type != SpriteExplosion && spr->type != SpriteBumerang && 
-            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm) {
+            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm && spr->type != SpriteShield) {
 			    if(CheckCollision(THIS, spr)) {
-                    if(player_state != 6 && inmu == FALSE){
+                    if(player_state != 6 && player_state != 9 && inmu == FALSE){
                         if(THIS->x < spr->x){
                             hit_dir = FALSE;
                         }else{
@@ -563,7 +564,7 @@ void Update_SpritePlayer() {
 		    }
             if(spr->type == SpriteBoss1Arm ){
                 if(CheckCollision(THIS,spr)  && THIS->y > spr->y ){
-                    if(player_state != 6 && inmu == FALSE){
+                    if(player_state != 6 && player_state != 9 && inmu == FALSE){
                         if(THIS->x < spr->x){
                             hit_dir = FALSE;
                         }else{

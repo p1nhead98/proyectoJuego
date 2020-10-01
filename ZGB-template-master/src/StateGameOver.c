@@ -13,7 +13,9 @@
 #include "../res/src/gameoverscreen.h"
 #include "../res/src/font.h"
 const UINT16 bp_gameoverscreen[] = {PALETTE_FROM_HEADER(housetiles)};
-
+extern UINT8 current_level;
+extern UINT8 last_level;
+extern UINT16 lives;
 extern INT8 current_life;
 extern const UINT8 max_life;
 void Start_StateGameOver() {
@@ -27,6 +29,9 @@ void Start_StateGameOver() {
 
 void Update_StateGameOver() {
 	if(KEY_TICKED(J_START) ) {
+		lives = 3;
+		last_level = 0;
+		current_level = 0;
 		current_life = max_life;
 		SetState(StateGame);
 	}

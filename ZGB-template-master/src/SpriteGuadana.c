@@ -5,7 +5,7 @@
 #include "Math.h"
 #include "Scroll.h"
 
-const UINT8 guad_anim[] = {4,0,1,2,3};
+const UINT8 guad_anim[] = {4,0,1,0,1};
 extern INT16 player_x;
 extern INT16 player_y;
 
@@ -45,12 +45,47 @@ void Update_SpriteGuadana(){
     SPRITE_SET_CGB_PALETTE(THIS, 3);
     SPRITE_SET_DMG_PALETTE(THIS, 0);
 
-       
-            SetSpriteAnim(THIS,guad_anim,15);
-            if(data->start){
-                GuadanaDirection(data);
-                data->start=FALSE;
+    SetSpriteAnim(THIS,guad_anim,15);
+    if(data->start){
+        GuadanaDirection(data);
+        data->start=FALSE;
+    }
+
+    switch(THIS->anim_frame){
+        case 0:
+            if(data->accel_x == -1){
+                THIS->flags = 32;
+            }else{
+                THIS->flags = 0;
             }
+            
+        break;
+
+        case 1:
+            if(data->accel_x == -1){
+                THIS->flags = 32;
+            }else{
+                THIS->flags = 0;
+            }
+        break;
+
+        case 2:
+            if(data->accel_x == -1){
+                THIS->flags = 64;
+            }else{
+                THIS->flags = 96;
+            }
+        break;
+
+        case 3:
+            if(data->accel_x == -1){
+                THIS->flags = 64;
+            }else{
+                THIS->flags = 96;
+            } 
+        break;
+    }
+            
         
         
         

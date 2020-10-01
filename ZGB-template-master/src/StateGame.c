@@ -28,11 +28,11 @@
 UINT8 col_tiles_forest[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,50,52,53,54,57,58,59,60,61,62,65,83,84,85,86,89,90,91,92,0};
 UINT8 col_down_forest[] = {32,34,35,36,38,39,55,93,95,96,98,126,127,0};
 
-UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,78,79,80,81,82,83,84,0};
+UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,78,79,80,81,82,83,84,0};
 UINT8 col_down_town[] = {126,127,0};
 const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntilesgb)};
 
-UINT8 col_tiles_house[] = {1,27,28,23,24,25,26,33,34,4,5,0};
+UINT8 col_tiles_house[] = {1,19,20,27,28,23,24,25,26,33,34,4,5,0};
 UINT8 col_down_house[] = {126,127,0};
 const UINT16 bp_house1[] = {PALETTE_FROM_HEADER(housetiles)};
 
@@ -45,7 +45,7 @@ UINT8 col_tiles_town2[] = {3,4,5,6,0};
 
 extern UINT8* gameover_mod_Data[];
 extern INT8 current_life;
-extern BOOLEAN weapon1;
+
 extern UINT16 lives;
 
 UINT8 water;
@@ -121,7 +121,7 @@ void Start_StateGame() {
 	SpriteManagerLoad(14);
 	SpriteManagerLoad(20);
 	SpriteManagerLoad(21);
-	
+	SpriteManagerLoad(26);
 	
 	switch(current_level){
 	
@@ -130,9 +130,8 @@ void Start_StateGame() {
 			SpriteManagerLoad(2);
 			
 			if(last_level == 0){
-				current_life = 8;
-				lives = 3;
-				weapon1 = FALSE;
+
+				
 				scroll_target = SpriteManagerAdd(SpritePlayer, 16, 95);
     		
 			}else if(last_level == 1){

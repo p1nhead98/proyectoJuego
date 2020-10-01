@@ -63,23 +63,17 @@ void Update_SpriteShooter(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain  ) {
+			if(spr->type == SpriteChain || spr->type == SpriteBumerang || spr->type == SpriteGuadana ) {
 				if(CheckCollision(THIS, spr)) {
                     
                         //SkelDeathSound();
 					    SpriteManagerRemove(THIS_IDX);
-                        if(energy<=19){
-                            energy++;
+                        if(spr->type == SpriteChain){
+                            if(energy<=19){
+                                energy++;
+                            }
                         }
                         refreshEnergy(energy);
-                        SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                    
-                }
-			}else if(spr->type == SpriteBumerang ) {
-				if(CheckCollision(THIS, spr)) {
-                    
-                        //SkelDeathSound();
-					    SpriteManagerRemove(THIS_IDX);
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     
                 }

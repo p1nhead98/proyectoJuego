@@ -4,14 +4,14 @@
 #include "ZGBMain.h"
 #include "Math.h"
 #include "Scroll.h"
-
+#include "hud.h"
 extern INT16 player_x;
 extern INT16 player_y;
 extern BOOLEAN gameOver;
 const UINT8 stoneman_0[] = {6, 7,7,7,7,3,3};
 const UINT8 stoneman_1[] = {4, 1,3,1,5};
 const UINT8 stoneman_2[] = {1, 1};
-
+extern UINT16 energy;
 struct StoneManCustomData
 {
     BOOLEAN canHurt;
@@ -119,13 +119,15 @@ void Update_SpriteStoneMan(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain ) {
+			if(spr->type == SpriteChain || spr->type == SpriteGuadana || spr->type == SpriteBumerang) {
 				if(CheckCollision(THIS, spr)) {
                     
                         if(data->lives >0 && data->canHurt == FALSE){
                             data->canHurt = TRUE;
                             if(spr->type == SpriteChain){
                                 data->lives = data->lives - 2;
+                            }else if(spr->type == SpriteGuadana || spr->type == SpriteBumerang){
+                                data->lives = data->lives - 1;
                             }
                             data->state = 2;
                             
@@ -134,6 +136,16 @@ void Update_SpriteStoneMan(){
                             
                         }else if(data->lives < 1){
                             //FSkelDeathSound();
+                            if(spr->type == SpriteChain){
+                                if(energy<=17){
+                                    energy = energy + 3;
+                                }else if(energy == 18){
+                                    energy = energy + 2;
+                                }else if(energy == 19){
+                                    energy = energy + 1;
+                                }
+                            }
+                            refreshEnergy(energy);
 					        SpriteManagerRemove(THIS_IDX);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y - 16);

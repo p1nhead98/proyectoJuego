@@ -3,7 +3,7 @@
 #include "SpriteManager.h"
 #include "ZGBMain.h"
 #include "Math.h"
-const UINT8 bum_anim[] = {2,0,1};
+const UINT8 bum_anim[] = {2,0,0};
 
 extern INT16 player_x;
 extern INT16 player_y;
@@ -19,11 +19,11 @@ struct bumerangCustomData
 
 void bdirection(struct bumerangCustomData* data){
     
-        if(SPRITE_GET_VMIRROR(THIS)){
-            data->b_accel_x = -64;
-        }else{
-            data->b_accel_x = +80;
-        }
+    if(SPRITE_GET_VMIRROR(THIS)){
+        data->b_accel_x = -64;
+    }else{
+        data->b_accel_x = +80;
+    }
       
 }
 
@@ -48,42 +48,44 @@ void Update_SpriteBumerang(){
         bdirection(data);
         data->start=FALSE;
     }
-        if(data->b_accel_x == 0){
-            data->canDest=TRUE;
+    if(THIS->anim_frame == 0){
+        THIS->flags = 0;
+    }else{
+        THIS->flags = 32;
+    }
+
+    if(data->b_accel_x == 0){
+        data->canDest=TRUE;
+    }
+    if(THIS->x < player_x){
+        if(data->b_accel_x < 50){
+            data->b_accel_x +=2;
         }
-        if(THIS->x < player_x){
-            if(data->b_accel_x < 50){
-                data->b_accel_x +=2;
-            }
-        }else {
-             if(data->b_accel_x > -50){
-                data->b_accel_x -=2;
-             }
+    }else {
+        if(data->b_accel_x > -50){
+            data->b_accel_x -=2;
         }
-        if(data->canDest == TRUE){
-            if(THIS->y < player_y){
-                
-                    data->b_accel_y+=2;
-                
-            }else{
-               
-                    data->b_accel_y-=2;
-                
-            }
+    }
+    if(data->canDest == TRUE){
+        if(THIS->y < player_y){        
+            data->b_accel_y+=2;    
+        }else{  
+            data->b_accel_y-=2;
         }
-        THIS->x = THIS->x + (data->b_accel_x >> 4);
-        THIS->y = THIS->y + (data->b_accel_y >> 4);
+    }
+    THIS->x = THIS->x + (data->b_accel_x >> 4);
+    THIS->y = THIS->y + (data->b_accel_y >> 4);
 
 
-     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpritePlayer) {
-				if(CheckCollision(THIS, spr)) {
-                    if(data->canDest == TRUE){
-                        SpriteManagerRemove(THIS_IDX);
-                    }
-                    }
-				}
-			}
+    SPRITEMANAGER_ITERATE(i, spr) {
+	    if(spr->type == SpritePlayer) {
+	        if(CheckCollision(THIS, spr)) {
+                if(data->canDest == TRUE){
+                    SpriteManagerRemove(THIS_IDX);
+                }
+            }
+	    }
+	}
 
 }
 void Destroy_SpriteBumerang(){

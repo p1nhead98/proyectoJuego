@@ -17,7 +17,7 @@
 
 const UINT16 prologue[] = {PALETTE_FROM_HEADER(prologuetiles)};
 
-
+extern UINT16 lives;
 extern UINT8 etapa;
 extern UINT8 last_state;
 INT8 splashScreenCounter;
@@ -54,6 +54,7 @@ void Update_StateSplashScreen() {
         splashScreenCounter = 0;
         switch(etapa){
             case 0:
+                lives = 3;
                 SetState(StateGame); 
             break;
         }

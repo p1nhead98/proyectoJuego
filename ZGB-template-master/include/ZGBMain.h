@@ -30,11 +30,12 @@ _SPRITE_DMG(SpriteLand, land)\
 _SPRITE_DMG(SpriteStoneMan, stoneman)\
 _SPRITE_DMG(SpriteStone, stone)\
 _SPRITE_DMG(SpriteGuadana, guadana)\
-_SPRITE_DMG(SpriteBoleadora, boleadora)\
+_SPRITE_DMG(SpriteBoleadora, grenade)\
 _SPRITE_DMG(SpriteSkelBoss, skelboss)\
 _SPRITE_DMG(SpriteBoss1Arm, boss1arm)\
 _SPRITE_DMG(SpriteSparkBall, sparkball)\
 _SPRITE_DMG(SpriteTitleFace, titleFace)\
+_SPRITE_DMG(SpriteShield, shield)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
