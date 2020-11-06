@@ -43,3 +43,17 @@ void AnimateTiles_stage1() {
     
 
 }
+
+void ScreenShake(){
+    UINT8 i = 0;
+   
+    if(i <= 21){
+        i++;
+        if(i % 2 == 0){
+            scroll_x = scroll_x + 6;
+        }else{
+            scroll_x = scroll_x - 6;
+        }
+        
+    }
+}

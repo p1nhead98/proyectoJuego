@@ -6,6 +6,8 @@
 #include "Math.h"
 #include "Sound.h"
 #include "hud.h"
+#include "print.h"
+
 extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 skel_1[] = {1, 0};
@@ -13,6 +15,7 @@ const UINT8 skel_2[] = {6, 0,1,2,3,4,4};
 const UINT8 skel_3[] = {4, 4,5,4,6};
 const UINT8 skel_4[] = {4, 7,8,9,9};
 extern UINT16 energy;
+extern UINT16 subweaponCounter;
 struct SkeletonCustomData
 {
     UINT8 skel_state;
@@ -90,21 +93,35 @@ void Update_SpriteSkeleton(){
     SPRITEMANAGER_ITERATE(i, spr) {
 			if(spr->type == SpriteChain ) {
 				if(CheckCollision(THIS, spr)) {
-                    
+
+                        subweaponCounter += 1;
+                        SpriteManagerAdd(SpriteItems, THIS->x, THIS->y);
+
+
                         SkelDeathSound();
-					    SpriteManagerRemove(THIS_IDX);
+					    
                         if(energy<=19){
                             energy++;
                         }
+                        PRINT_POS(14, 1);
+                        Printf("%d", (UINT16)(subweaponCounter));
                         refreshEnergy(energy);
+                        
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                        SpriteManagerRemove(THIS_IDX);
                 }
 			}else if(spr->type == SpriteBumerang ||spr->type == SpriteGuadana) {
 				if(CheckCollision(THIS, spr)) {
                     if(spr->anim_frame >=1){
+                        subweaponCounter += 1;
+                        SpriteManagerAdd(SpriteItems, THIS->x, THIS->y);
                         SkelDeathSound();
-					    SpriteManagerRemove(THIS_IDX);
+                        PRINT_POS(14, 1);
+                        Printf("%d", (UINT16)(subweaponCounter));
+					    
+                        
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
+                        SpriteManagerRemove(THIS_IDX);
                     }
                 }
 			}

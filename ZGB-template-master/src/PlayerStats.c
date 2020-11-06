@@ -5,4 +5,6 @@ UINT16 energy = 0;
 const INT8 inmunity_time = 100;
 UINT16 lives;
 UINT8 currentSubWeapon;
+UINT8 lastSubWeapon;
+UINT16 subweaponCounter;
    

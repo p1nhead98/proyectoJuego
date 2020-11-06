@@ -18,7 +18,7 @@ BOOLEAN armAttack;
 BOOLEAN sparkAttack;
 INT16 boss1Counter;
 extern BOOLEAN boss1death;
-extern void ScreenShake();
+
 
 
 struct SkelBossCustomData

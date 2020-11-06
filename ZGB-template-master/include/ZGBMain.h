@@ -35,7 +35,7 @@ _SPRITE_DMG(SpriteSkelBoss, skelboss)\
 _SPRITE_DMG(SpriteBoss1Arm, boss1arm)\
 _SPRITE_DMG(SpriteSparkBall, sparkball)\
 _SPRITE_DMG(SpriteTitleFace, titleFace)\
-_SPRITE_DMG(SpriteShield, shield)\
+_SPRITE_DMG(SpriteItems, items)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

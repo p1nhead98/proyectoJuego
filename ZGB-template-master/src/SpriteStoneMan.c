@@ -119,22 +119,24 @@ void Update_SpriteStoneMan(){
 
 
     SPRITEMANAGER_ITERATE(i, spr) {
-			if(spr->type == SpriteChain || spr->type == SpriteGuadana || spr->type == SpriteBumerang) {
+			if(spr->type == SpriteChain || spr->type == SpriteGuadana || spr->type == SpriteBumerang || spr->type == SpriteBoleadora) {
 				if(CheckCollision(THIS, spr)) {
                     
                         if(data->lives >0 && data->canHurt == FALSE){
                             data->canHurt = TRUE;
                             if(spr->type == SpriteChain){
-                                data->lives = data->lives - 2;
+                                data->lives -= 2;
                             }else if(spr->type == SpriteGuadana || spr->type == SpriteBumerang){
-                                data->lives = data->lives - 1;
+                                data->lives -= 1;
+                            }else if(spr->type == SpriteBoleadora){
+                                data->lives -= 8;
                             }
                             data->state = 2;
                             
                             
                             
                             
-                        }else if(data->lives < 1){
+                        }else if(data->lives <= 1){
                             //FSkelDeathSound();
                             if(spr->type == SpriteChain){
                                 if(energy<=17){

@@ -21,6 +21,7 @@ extern INT8 current_life;
 extern const UINT8 max_life;
 extern UINT8 etapa;
 extern UINT8 last_state;
+extern UINT8 subweaponCounter;
 INT8 titlecounter;
 void Start_StateTitleScreen() {
     
@@ -43,6 +44,7 @@ void Update_StateTitleScreen() {
     //PRINT(3, 17, "BLUEBLOOD 2020");
 	if(KEY_TICKED(J_START)) {
 		current_life = max_life;
+        subweaponCounter = 0;
         last_state = current_state;
 		SetState(StateSplashScreen);
 	}

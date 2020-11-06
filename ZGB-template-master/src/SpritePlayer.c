@@ -17,7 +17,7 @@ const UINT8 p_anim_slide[] = {2,7,7};
 const UINT8 p_anim_jump[] = {1,2};
 const UINT8 p_anim_attack[] = {4,8,8,9,9}; // chain attack anim
 const UINT8 p_anim_death[] = {4,12,13,13,13}; // death anim
-const UINT8 p_anim_attack3[] = {3,8,9,9};// boleadora attack anim
+const UINT8 p_anim_attack3[] = {3,9,9,8};// boleadora attack anim
 const UINT8 p_anim_ladders[] = {2,10,10};
 const UINT8 p_anim_hit[] = {4,11,11,11,11};
 const UINT8 p_anim_fall[] = {1,3};
@@ -37,6 +37,7 @@ BOOLEAN canEnter;
 BOOLEAN hit_dir; 
 INT16 inmunity = 0;
 extern UINT8 currentSubWeapon;
+extern UINT8 lastSubWeapon;
 extern const UINT8 max_life;
 INT8 current_life;
 
@@ -179,14 +180,15 @@ void attack(){
 void attack1(){
     struct Sprite* sprite_bumerang;
     switch(currentSubWeapon){
-        case 3:
-            sprite_bumerang = SpriteManagerAdd(SpriteShield,THIS->x ,THIS->y - 9);
+        case 1:
+            sprite_bumerang = SpriteManagerAdd(SpriteGuadana,THIS->x,THIS->y);
         break;
         case 0:
-             sprite_bumerang = SpriteManagerAdd(SpriteBoleadora,THIS->x,THIS->y);
+            sprite_bumerang = SpriteManagerAdd(SpriteBumerang,THIS->x ,THIS->y );
+             
         break;
-        case 1:
-             sprite_bumerang = SpriteManagerAdd(SpriteGuadana,THIS->x,THIS->y);
+        case 2:
+             sprite_bumerang = SpriteManagerAdd(SpriteBoleadora,THIS->x,THIS->y);
         break;
     }
     if(SPRITE_GET_VMIRROR(THIS)){
@@ -241,7 +243,7 @@ void Start_SpritePlayer() {
     playerCollisions();
     RefreshLife();
     refreshLives(lives);
-    //RefreshWeapon1(weapon1);
+    RefreshWeapon(currentSubWeapon);
     refreshEnergy(energy);
     canEnter = FALSE;
     inmunity = 0;
@@ -252,7 +254,9 @@ void Start_SpritePlayer() {
 void Update_SpritePlayer() {
     UINT8 i;
     struct Sprite* spr;
-
+    if(lastSubWeapon != currentSubWeapon){
+        RefreshWeapon(currentSubWeapon);
+    }
     if(gameOver == FALSE){
         colisiones();
         /*
@@ -267,19 +271,7 @@ void Update_SpritePlayer() {
         }
         */
     
-       if(KEY_TICKED(J_SELECT) && currentSubWeapon == 0){
-            
-            currentSubWeapon++;
-            PRINT_POS(17, 0);
-            Printf(":%d", (UINT16)(currentSubWeapon));
-            RefreshWeapon(currentSubWeapon);
-       }else if(KEY_TICKED(J_SELECT) && currentSubWeapon == 1){
-            
-            currentSubWeapon = 0;
-            PRINT_POS(17, 0);
-            Printf(":%d", (UINT16)(currentSubWeapon));
-            RefreshWeapon(currentSubWeapon);
-       }
+       
     
         // Chequea si esta sobre una puerta y se presiona "up", asi asignar el valor del level a cual se ira
         if(canEnter == TRUE && KEY_TICKED(J_UP)){
@@ -347,7 +339,7 @@ void Update_SpritePlayer() {
                     }
                 }
 
-                if(KEY_PRESSED(J_UP) && KEY_TICKED(J_B) && KEY_TICKED(J_A)){ // sub weapon idle attack
+                if(KEY_PRESSED(J_UP) && KEY_TICKED(J_B) && KEY_TICKED(J_A)){ // sub weapon jump attack
                     if(energy != 0){
                         attack1();
                         energy--;
@@ -373,11 +365,9 @@ void Update_SpritePlayer() {
                 
             
                 if(THIS->anim_frame == 3){
-                    if(player_state == 2){
-                        player_state = 3;
-                    }else if(player_state == 1){
+                    
                         player_state = 0;
-                    }   
+                       
                 }
             break;
 
@@ -388,9 +378,9 @@ void Update_SpritePlayer() {
 
                 PlayerMovement();        
                 if(THIS->anim_frame == 3){
-                    if(player_state == 2){
+                    
                         player_state = 3;  
-                    }   
+                     
                 }
             
             break;
@@ -480,11 +470,9 @@ void Update_SpritePlayer() {
             case 7: //Subarma quieto
                 SetSpriteAnim(THIS, p_anim_attack3, 15);
                 if(THIS->anim_frame == 2){
-                    if(player_state == 7){
-                        player_state = 3;
-                    }else if(player_state == 7){
-                        player_state = 0;
-                    }   
+                    
+                    player_state = 0;
+                    
                 }
             break;
             
@@ -492,9 +480,9 @@ void Update_SpritePlayer() {
             SetSpriteAnim(THIS, p_anim_attack3, 15);
             PlayerMovement();        
                 if(THIS->anim_frame == 2){
-                    if(player_state == 8){
+                    
                         player_state = 3;  
-                    }   
+                       
                 }
             break;
 
@@ -545,7 +533,7 @@ void Update_SpritePlayer() {
         SPRITEMANAGER_ITERATE(i, spr) {
         
 		    if(spr->type != SpriteChain && spr->type != SpriteGuadana && spr->type != SpriteLand && spr->type != SpriteExplosion && spr->type != SpriteBumerang && 
-            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm && spr->type != SpriteShield) {
+            spr->type != SpriteBoleadora && spr->type != SpritePlayer && spr->type != SpriteUp && spr->type != SpriteBoss1Arm && spr->type != SpriteItems ) {
 			    if(CheckCollision(THIS, spr)) {
                     if(player_state != 6 && player_state != 9 && inmu == FALSE){
                         if(THIS->x < spr->x){

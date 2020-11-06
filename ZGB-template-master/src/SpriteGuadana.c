@@ -91,9 +91,9 @@ void Update_SpriteGuadana(){
         
        
             THIS->x = THIS->x + (data->accel_x );
-            if(data->accel_y < 80){
-            data->accel_y +=4;
-        }
+    if(data->accel_y < 80){
+        data->accel_y +=4;
+    }
     THIS->y = THIS->y + (data->accel_y >> 4);
             /*if(SPRITE_GET_VMIRROR(THIS)){
                 DrawFrame(FRAME_8x16, THIS->first_tile , THIS->x - scroll_x - 8 , THIS->y - scroll_y , THIS->flags);

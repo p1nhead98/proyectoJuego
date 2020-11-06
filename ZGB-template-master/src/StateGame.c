@@ -41,6 +41,8 @@ const UINT16 s_gameover[] = {PALETTE_FROM_HEADER(gospalette)};
 
 const UINT16 s_boss1[] = {PALETTE_FROM_HEADER(skelboss)};
 
+extern UINT8* tema1_mod_Data[];
+
 UINT8 col_tiles_town2[] = {3,4,5,6,0};
 
 extern UINT8* gameover_mod_Data[];
@@ -130,7 +132,7 @@ void Start_StateGame() {
 			SpriteManagerLoad(2);
 			
 			if(last_level == 0){
-
+				PlayMusic(tema1_mod_Data, 1, 1);
 				
 				scroll_target = SpriteManagerAdd(SpritePlayer, 16, 95);
     		
@@ -139,6 +141,7 @@ void Start_StateGame() {
 			}
 			SetPalette(SPRITES_PALETTE, 0, 8, s_palette_1, bank_StateGame);
 			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
+			
 			InitScroll(level, col_tiles_town, col_down_town);
 			//PlayMusic(gameover_mod_Data, 5, 0);
 		break;

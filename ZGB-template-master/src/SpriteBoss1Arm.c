@@ -14,7 +14,7 @@ const UINT8 arm4[] = {1,4};
 
 extern INT16 player_x;
 extern INT16 player_y;
-
+INT8 shakeForce;
 extern BOOLEAN armAttack;
 extern BOOLEAN sparkAttack;
 BOOLEAN boss1death;
@@ -41,19 +41,7 @@ void SpriteShake(){
         }
     }
 }
-void ScreenShake(){
-    UINT8 i = 0;
-   
-    if(i <= 31){
-        i++;
-        if(i % 2 == 0){
-            scroll_x = scroll_x+4;
-        }else{
-            scroll_x = scroll_x-4;
-        }
-        
-    }
-}
+
 
 void Start_SpriteBoss1Arm(){
     struct Boss1ArmCustomData* data = (struct Boss1ArmCustomData*)THIS->custom_data;
@@ -62,7 +50,7 @@ void Start_SpriteBoss1Arm(){
     THIS->coll_y = 0;
     THIS->coll_w = 10;
     THIS->coll_h = 10;
-
+    shakeForce = 4;
     data->state = 0;
     
     data->state2 = 0; 

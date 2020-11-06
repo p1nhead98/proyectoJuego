@@ -1,9 +1,12 @@
 #include "hud.h"
 #include "Banks/SetBank6.h"
 #include "print.h"
+#include "SpriteManager.h"
+#include "ZGBMain.h"
 
 extern const UINT8 max_life;
 extern INT8 current_life;
+
 
 
 void RefreshWeapon(INT8 weapon){
@@ -17,10 +20,10 @@ void RefreshWeapon(INT8 weapon){
     const UINT8 W2_3 = 114;
     const UINT8 W2_4 = 115;
 
-    const UINT8 W3_1 = 104;
-    const UINT8 W3_2 = 105;
-    const UINT8 W3_3 = 106;
-    const UINT8 W3_4 = 107;
+    const UINT8 W3_1 = 108;
+    const UINT8 W3_2 = 109;
+    const UINT8 W3_3 = 110;
+    const UINT8 W3_4 = 111;
 
     switch(weapon){
         case 0:
@@ -36,7 +39,11 @@ void RefreshWeapon(INT8 weapon){
             set_win_tiles(10, 0, 1, 1, &W2_3);
             set_win_tiles(10, 1, 1, 1, &W2_4);
         break;
-        case 3:
+        case 2:
+            set_win_tiles(9, 0, 1, 1, &W3_1);
+            set_win_tiles(9, 1, 1, 1, &W3_2);
+            set_win_tiles(10, 0, 1, 1, &W3_3);
+            set_win_tiles(10, 1, 1, 1, &W3_4);
         break;
     }
    /* if(weapon == FALSE){
