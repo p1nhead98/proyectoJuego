@@ -1,6 +1,9 @@
 #include "..\res\src\sky1.h"
 #include "..\res\src\sky2.h"
 #include "..\res\src\wateranim.h"
+#include "..\res\src\player.h"
+#include "..\res\src\player2.h"
+#include "..\res\src\transform.h"
 #include <string.h>
 #include "ZGBMain.h"
 #include "Scroll.h"
@@ -56,4 +59,23 @@ void ScreenShake(){
         }
         
     }
+}
+
+void TransformPlayer(){
+	extern BOOLEAN canTransform;
+	if(canTransform == TRUE){
+		PUSH_BANK(player2.bank)
+		set_sprite_data(0,32,&player2.data->data[0]);
+		POP_BANK;
+	}else if(canTransform == FALSE){
+		PUSH_BANK(player.bank)
+		set_sprite_data(0,32,&player.data->data[0]);
+		POP_BANK;
+	}
+}
+
+void Transforming(){
+	PUSH_BANK(transform.bank);
+	set_sprite_data(0, 16, &transform.data->data[0]);
+	POP_BANK;
 }

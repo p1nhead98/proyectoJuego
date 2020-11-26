@@ -22,6 +22,7 @@ extern BOOLEAN gameOver;
 
 void SShoot(struct ShooterCustomData* data){
     if(data->canShoot == TRUE){
+        PlayFx(CHANNEL_4, 8, 0x24, 0xa2, 0x70, 0x80);
         struct Sprite* sprite_ebullet1 = SpriteManagerAdd(SpriteEnemyBullet,THIS->x,THIS->y);
         sprite_ebullet1->flags = THIS->flags;
         sprite_ebullet1->unique_id = 4;

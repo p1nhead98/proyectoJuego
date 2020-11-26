@@ -12,16 +12,19 @@
 
 
 const UINT8 p_anim_idle[] = {5,0,0,0,0,1};
+const UINT8 p2_anim_idle[] = {1,3};
 const UINT8 p_anim_walk[] = {4,4,5,6,5};
+const UINT8 p2_anim_walk[] = {2, 5, 3 };
 const UINT8 p_anim_slide[] = {2,7,7};
 const UINT8 p_anim_jump[] = {1,2};
+const UINT8 p2_anim_jump[] = {1,7};
 const UINT8 p_anim_attack[] = {4,8,8,9,9}; // chain attack anim
 const UINT8 p_anim_death[] = {4,12,13,13,13}; // death anim
 const UINT8 p_anim_attack3[] = {3,9,9,8};// boleadora attack anim
 const UINT8 p_anim_ladders[] = {2,10,10};
 const UINT8 p_anim_hit[] = {4,11,11,11,11};
 const UINT8 p_anim_fall[] = {1,3};
-
+const UINT8 p_anim_transform[] = {6,1,3,1,3,1,3};
 INT16 player_accel_y;
 struct Sprite* sprite_player = 0;
 struct Sprite* player_parent = 0;
@@ -32,6 +35,7 @@ INT8 player_state;
 INT16 player_x,player_y;
 
 BOOLEAN inmu;
+BOOLEAN canTransform;
 UINT16 goCounter;
 BOOLEAN canEnter;
 BOOLEAN hit_dir; 
@@ -146,7 +150,12 @@ void colisiones(){
 
 void jump(){
     if(player_state == 0 || player_state == 5){
-        player_accel_y = -60;
+        if(canTransform == TRUE){
+            player_accel_y = -90;
+        }else if(canTransform == FALSE){
+            player_accel_y = -60;
+        }
+        
         player_state = 3;
         player_parent = 0;
     }
@@ -248,7 +257,7 @@ void Start_SpritePlayer() {
     canEnter = FALSE;
     inmunity = 0;
     goCounter = 0;
-    
+    canTransform = FALSE;
 }
 
 void Update_SpritePlayer() {
@@ -256,6 +265,19 @@ void Update_SpritePlayer() {
     struct Sprite* spr;
     if(lastSubWeapon != currentSubWeapon){
         RefreshWeapon(currentSubWeapon);
+    }
+    
+
+    if(KEY_TICKED(J_SELECT)){
+        if(canTransform == TRUE){
+            PlayFx(CHANNEL_4, 10, 0x3f, 0xf7, 0x00, 0xc0);
+            canTransform = FALSE;
+        }else if(canTransform == FALSE){
+            PlayFx(CHANNEL_4, 10, 0x3f, 0xf7, 0x00, 0xc0);
+            canTransform = TRUE;
+        }
+        
+        player_state = 10;
     }
     if(gameOver == FALSE){
         colisiones();
@@ -304,10 +326,20 @@ void Update_SpritePlayer() {
                 ladders();
 
                 if(KEY_PRESSED(J_LEFT) || KEY_PRESSED(J_RIGHT)){  // Asigna la animacion de correr
-                    SetSpriteAnim(THIS,p_anim_walk,9);
+                    if(canTransform == FALSE){
+                        SetSpriteAnim(THIS,p_anim_walk,9);
+                    }else if(canTransform == TRUE){
+                        SetSpriteAnim(THIS,p2_anim_walk,9);
+                    }
+                    
 
                 }else{
-                    SetSpriteAnim(THIS,p_anim_idle,4);
+                    if(canTransform == FALSE){
+                        SetSpriteAnim(THIS,p_anim_idle,4);
+                    }else if(canTransform == TRUE){
+                        SetSpriteAnim(THIS,p2_anim_idle,4);
+                    }
+                    
                 }
             
                 if(KEY_TICKED(J_A) && !KEY_PRESSED(J_DOWN)){ //salto
@@ -387,9 +419,19 @@ void Update_SpritePlayer() {
 
             case 3: // Saltando
                 if(player_accel_y < 1){ // comprueba el momento en que desciende en el salto y le da su animacion
-                    SetSpriteAnim(THIS, p_anim_jump, 15);
+                    if(canTransform == FALSE){
+                        SetSpriteAnim(THIS, p_anim_jump, 15);
+                    }else if(canTransform == TRUE){
+                        SetSpriteAnim(THIS, p2_anim_jump, 15);
+                    }
+
                 }else{
-                    SetSpriteAnim(THIS, p_anim_fall, 15);
+                    if(canTransform == FALSE){
+                        SetSpriteAnim(THIS, p_anim_fall, 15);
+                    }else if(canTransform == TRUE){
+                        SetSpriteAnim(THIS, p2_anim_jump, 15);
+                    }
+                    
                 }
                 if(player_accel_y < 0 && !KEY_PRESSED(J_A)){ //Si no se mantiene "A" se deja de saltar
                     player_accel_y = 0;
@@ -496,7 +538,17 @@ void Update_SpritePlayer() {
 
             }
             break;
-        }   
+
+            case 10: //Transform
+                Transforming();
+                
+                SetSpriteAnim(THIS, p_anim_transform, 30);
+                if(THIS->anim_frame == 5){
+                    TransformPlayer();
+                    player_state = 0;
+                }
+                break;
+        }    
 
 
 
@@ -603,6 +655,10 @@ void Update_SpritePlayer() {
 			
 		    }
 	    }
+        
+        if(canTransform == TRUE || canTransform == FALSE && player_state == 10){
+            DrawFrame(FRAME_16x16, THIS->frame - 3 , THIS->x - scroll_x , THIS->y - scroll_y - 16, THIS->flags);
+        }
     }else{
         SetSpriteAnim(THIS, p_anim_hit, 15);
         
