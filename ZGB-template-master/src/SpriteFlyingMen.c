@@ -6,7 +6,7 @@
 #include "hud.h"
 extern INT16 player_x;
 const UINT8 f_men[] = {3, 0,1,2};
-extern UINT16 energy;
+
 struct fmenCustomData
 {
 
@@ -49,10 +49,7 @@ void Update_SpriteFlyingMen(){
                     if(spr->anim_frame >=1){
                         //SkelDeathSound();
 					    SpriteManagerRemove(THIS_IDX);
-                        if(energy<=19){
-                            energy++;
-                        }
-                        refreshEnergy(energy);
+                        
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                     }
                 }

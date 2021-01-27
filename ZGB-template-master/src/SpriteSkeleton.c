@@ -14,7 +14,7 @@ const UINT8 skel_1[] = {1, 0};
 const UINT8 skel_2[] = {6, 0,1,2,3,4,4};
 const UINT8 skel_3[] = {4, 4,5,4,6};
 const UINT8 skel_4[] = {4, 7,8,9,9};
-extern UINT16 energy;
+
 extern UINT16 subweaponCounter;
 struct SkeletonCustomData
 {
@@ -100,12 +100,10 @@ void Update_SpriteSkeleton(){
 
                         SkelDeathSound();
 					    
-                        if(energy<=19){
-                            energy++;
-                        }
+                        
                         PRINT_POS(14, 1);
                         Printf("%d", (UINT16)(subweaponCounter));
-                        refreshEnergy(energy);
+                        
                         
                         SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                         SpriteManagerRemove(THIS_IDX);

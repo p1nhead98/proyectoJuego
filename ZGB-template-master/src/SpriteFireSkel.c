@@ -11,7 +11,7 @@ extern INT16 player_x;
 extern INT16 player_y;
 const UINT8 fskel_1[] = {4, 0,1,2,1};
 const UINT8 fskel_2[] = {1, 1};
-extern UINT16 energy;
+
 struct FSkeletonCustomData
 {
     UINT8 skel_state;
@@ -123,10 +123,10 @@ void Update_SpriteFireSkel(){
                             FSkelDeathSound();
 					        SpriteManagerRemove(THIS_IDX);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                            if(energy<=19){
-                                energy = energy+3;
-                            }
-                            refreshEnergy(energy);
+                            // if(energy<=19){
+                            //     energy = energy+3;
+                            // }
+                            // refreshEnergy();
                         }
                     }
                 }

@@ -30,6 +30,10 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 		case 243: return SpriteStoneMan; break;
 		case 242: return SpriteSkelBoss; break;
 		case 241: return SpriteTitleFace; break;
+		case 240: return SpriteForestBossH; break;
+		case 239: return SpriteFallenLog; break;
+		case 238: return SpriteSpitter; break;
+		case 237: return SpriteSwingingLog; break;
 		}
 
 		*tile = *tile_ptr;

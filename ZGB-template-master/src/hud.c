@@ -5,8 +5,8 @@
 #include "ZGBMain.h"
 
 extern const UINT8 max_life;
-extern INT8 current_life;
 
+extern INT8 current_life;
 
 
 void RefreshWeapon(INT8 weapon){
@@ -70,24 +70,24 @@ void RefreshLife() {
     UINT8 last_tile;
     
     if(current_life !=0 ){
-        DPRINT(2, 0, "LIFE");
+        DPRINT(0, 0, "L:");
         last_tile = (current_life+1) / 2 ;
         for(i=0; i != (max_life / 2); ++i) {
-		    set_win_tiles(1 + i, 1, 1, 1, &EMPTY_HEART_TILE);
+		    set_win_tiles(1 + i, 0, 1, 1, &EMPTY_HEART_TILE);
 	    }
         if(current_life% 2 == 0){
 	        for(i = 0; i != (current_life / 2) ; ++i) {
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE);
+                set_win_tiles(1 + i, 0, 1, 1, &HEART_TILE);
             }
             for(; i != (max_life / 2); ++i) {
-		        set_win_tiles(1 + i, 1, 1, 1, &EMPTY_HEART_TILE);
+		        set_win_tiles(1 + i, 0, 1, 1, &EMPTY_HEART_TILE);
 	        }
         }else{
             for(i = 0; i != ((current_life - 1) / 2) ; ++i) {
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE);
+                set_win_tiles(1 + i, 0, 1, 1, &HEART_TILE);
 	        }
             if(i == ((current_life-1)/2)){
-                set_win_tiles(1 + i, 1, 1, 1, &HEART_TILE2);
+                set_win_tiles(1 + i, 0, 1, 1, &HEART_TILE2);
             }
         
         }

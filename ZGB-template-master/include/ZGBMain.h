@@ -36,6 +36,11 @@ _SPRITE_DMG(SpriteBoss1Arm, boss1arm)\
 _SPRITE_DMG(SpriteSparkBall, sparkball)\
 _SPRITE_DMG(SpriteTitleFace, titleFace)\
 _SPRITE_DMG(SpriteItems, items)\
+_SPRITE_DMG(SpriteForestBossH, flyingHead)\
+_SPRITE_DMG(SpriteTinyEye, eye2)\
+_SPRITE_DMG(SpriteFallenLog, fallinLog)\
+_SPRITE_DMG(SpriteSpitter, spitter)\
+_SPRITE_DMG(SpriteSwingingLog, swingingLog)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

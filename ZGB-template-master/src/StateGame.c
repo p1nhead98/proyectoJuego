@@ -25,8 +25,6 @@
 #include "Palette.h"
 
 
-UINT8 col_tiles_forest[] = {1,2,3,4,20,21,26,27,28,29,30,31,40,41,42,43,44,45,50,52,53,54,57,58,59,60,61,62,65,83,84,85,86,89,90,91,92,0};
-UINT8 col_down_forest[] = {32,34,35,36,38,39,55,93,95,96,98,126,127,0};
 
 UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,78,79,80,81,82,83,84,0};
 UINT8 col_down_town[] = {126,127,0};
@@ -45,13 +43,13 @@ extern UINT8* tema3_mod_Data[];
 
 UINT8 col_tiles_town2[] = {3,4,5,6,0};
 
-extern UINT8* gameover_mod_Data[];
+// extern UINT8* gameover_mod_Data[];
 extern INT8 current_life;
 
 extern UINT16 lives;
 
 UINT8 water;
-BOOLEAN gameOver;
+extern BOOLEAN gameOver;
 const UINT16 s_palette_1[] = {PALETTE_FROM_HEADER(player)};
 
 INT8 x = 0;
@@ -66,7 +64,6 @@ extern struct TilesInfo anim;
 extern INT16 player_x;
 extern INT16 player_y;
 extern INT8 player_state;
-UINT16 ny;
 
 
 
@@ -256,7 +253,7 @@ void Start_StateGame() {
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
-	//PlayMusic(forest_mod_Data,5,1);
+	
 	
 }
 

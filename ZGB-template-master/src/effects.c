@@ -45,7 +45,7 @@ void AnimateTiles_stage1() {
 
     
 
-}
+ }
 
 void ScreenShake(){
     UINT8 i = 0;
@@ -65,11 +65,11 @@ void TransformPlayer(){
 	extern BOOLEAN canTransform;
 	if(canTransform == TRUE){
 		PUSH_BANK(player2.bank)
-		set_sprite_data(0,32,&player2.data->data[0]);
+		set_sprite_data(0,48,&player2.data->data[0]);
 		POP_BANK;
 	}else if(canTransform == FALSE){
 		PUSH_BANK(player.bank)
-		set_sprite_data(0,32,&player.data->data[0]);
+		set_sprite_data(0,48,&player.data->data[0]);
 		POP_BANK;
 	}
 }

@@ -11,7 +11,7 @@ extern BOOLEAN gameOver;
 const UINT8 stoneman_0[] = {6, 7,7,7,7,3,3};
 const UINT8 stoneman_1[] = {4, 1,3,1,5};
 const UINT8 stoneman_2[] = {1, 1};
-extern UINT16 energy;
+
 struct StoneManCustomData
 {
     BOOLEAN canHurt;
@@ -138,16 +138,7 @@ void Update_SpriteStoneMan(){
                             
                         }else if(data->lives <= 1){
                             //FSkelDeathSound();
-                            if(spr->type == SpriteChain){
-                                if(energy<=17){
-                                    energy = energy + 3;
-                                }else if(energy == 18){
-                                    energy = energy + 2;
-                                }else if(energy == 19){
-                                    energy = energy + 1;
-                                }
-                            }
-                            refreshEnergy(energy);
+                            
 					        SpriteManagerRemove(THIS_IDX);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
                             SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y - 16);

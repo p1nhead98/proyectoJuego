@@ -1,4 +1,4 @@
-#include "Banks/SetBank3.h"
+#include "Banks/SetBank8.h"
 #include "Keys.h"
 #include "SpriteManager.h"
 #include "ZGBMain.h"
@@ -6,9 +6,8 @@
 #include "Math.h"
 #include "Sound.h"
 #include "hud.h"
-const UINT8 shooter_anim[] = {15, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 5, 0};
-
-struct ShooterCustomData
+const UINT8 spitter_anim[] = {15, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0};
+struct SpitterCustomData
 {
     BOOLEAN canShoot;
     INT8 counter;
@@ -18,7 +17,7 @@ struct ShooterCustomData
 extern INT16 player_x;
 extern BOOLEAN gameOver;
 
-void SShoot(struct ShooterCustomData *data)
+void SpitterShoot(struct SpitterCustomData *data)
 {
     if (data->canShoot == TRUE)
     {
@@ -29,19 +28,19 @@ void SShoot(struct ShooterCustomData *data)
         data->canShoot = FALSE;
     }
 }
-void Start_SpriteShooter()
+void Start_SpriteSpitter()
 {
-    struct ShooterCustomData *data = (struct ShooterCustomData *)THIS->custom_data;
-    SetSpriteAnim(THIS, shooter_anim, 15);
+    struct SpitterCustomData *data = (struct SpitterCustomData *)THIS->custom_data;
+    SetSpriteAnim(THIS, spitter_anim, 15);
     THIS->coll_x = 4;
     THIS->coll_y = 4;
     THIS->coll_w = 7;
     THIS->coll_h = 14;
     data->canShoot = TRUE;
 }
-void Update_SpriteShooter()
+void Update_SpriteSpitter()
 {
-    struct ShooterCustomData *data = (struct ShooterCustomData *)THIS->custom_data;
+    struct SpitterCustomData *data = (struct SpitterCustomData *)THIS->custom_data;
     UINT8 i;
     struct Sprite *spr;
     if (gameOver == TRUE)
@@ -62,7 +61,7 @@ void Update_SpriteShooter()
 
     if (THIS->anim_frame == 6)
     {
-        SShoot(data);
+        SpitterShoot(data);
     }
     if (THIS->anim_frame == 0)
     {
@@ -88,6 +87,6 @@ void Update_SpriteShooter()
         }
     }
 }
-void Destroy_SpriteShooter()
+void Destroy_SpriteSpitter()
 {
 }
