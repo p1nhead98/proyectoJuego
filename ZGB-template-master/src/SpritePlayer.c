@@ -135,7 +135,7 @@ void colisiones()
     switch (colision)
     {
     case 40u:
-       
+
         break;
     case 8u:
         if (hide == FALSE)
@@ -146,7 +146,7 @@ void colisiones()
 
     case 100u:
         THIS->y = THIS->y - 2;
-        
+
         break;
 
     case 125u:
@@ -215,6 +215,7 @@ void slide()
     {
         SetSpriteAnim(THIS, p_anim_slide, 7);
         if (THIS->x > 1 && THIS->x < (scroll_w - 15))
+        
             if (SPRITE_GET_VMIRROR(THIS))
             {
                 TranslateSprite(THIS, -2, 0);
@@ -228,20 +229,48 @@ void slide()
             player_state = 3;
             playerCollisions();
         }
-    }
+        }
+    
 }
 
-void attack()
+void normalAttack()
+{
+    struct Sprite *sprite_chain = SpriteManagerAdd(SpriteChain, THIS->x, THIS->y);
+    sprite_chain->flags = THIS->flags;
+}
+
+void transform1Attack()
+{
+    player_accel_y = 0;
+    SetSpriteAnim(THIS, p_anim_slide, 7);
+    if (THIS->x > 1 && THIS->x < (scroll_w - 15))
+    
+        if (SPRITE_GET_VMIRROR(THIS))
+        {
+            TranslateSprite(THIS, -3, 0);
+        }
+        else
+        {
+            TranslateSprite(THIS, 3, 0);
+        }
+    if (THIS->anim_frame == 1)
+    {
+        player_state = 3;
+        
+    }
+    
+}
+
+void attack(UINT8 p_state)
 {
     if (canTransform)
     {
-        struct Sprite *sprite_chain = SpriteManagerAdd(SpriteChain, THIS->x, THIS->y - 8);
-        sprite_chain->flags = THIS->flags;
+        player_state = 7;
     }
     else
     {
-        struct Sprite *sprite_chain = SpriteManagerAdd(SpriteChain, THIS->x, THIS->y);
-        sprite_chain->flags = THIS->flags;
+        player_state = p_state;
+        normalAttack();
     }
 }
 
@@ -355,7 +384,7 @@ void Update_SpritePlayer()
 
     if (KEY_TICKED(J_SELECT))
     {
-        //  set_bkg_tiles(((THIS->x + THIS->coll_x) + 4) >> 3, THIS->y - 15u , 1, 1, 55u); 
+        //  set_bkg_tiles(((THIS->x + THIS->coll_x) + 4) >> 3, THIS->y - 15u , 1, 1, 55u);
         if (canTransform == TRUE)
         {
             PlayFx(CHANNEL_4, 10, 0x3f, 0xf7, 0x00, 0xc0);
@@ -462,16 +491,8 @@ void Update_SpritePlayer()
             }
             if (KEY_TICKED(J_B) && !KEY_TICKED(J_A) && !KEY_PRESSED(J_UP))
             { // main weapon attack idle
-                if (canTransform)
-                {
-                    PlayFx(CHANNEL_4, 11, 0x3f, 0xf9, 0x73, 0xc0);
-                }
-                else
-                {
-                    PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
-                }
-                player_state = 1;
-                attack();
+                PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
+                attack(1);
                 //SpriteManagerAdd(SpriteChain,THIS->x,THIS->y);
             }
 
@@ -486,10 +507,8 @@ void Update_SpritePlayer()
                     PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
                 }
                 player_accel_y = -60;
-                player_state = 2;
-                attack();
+                attack(2);
             }
-
 
             break;
 
@@ -572,10 +591,10 @@ void Update_SpritePlayer()
             if (KEY_TICKED(J_B) && !KEY_PRESSED(J_UP))
             { //Ataque de arma primaria saltando
                 PlayFx(CHANNEL_4, 10, 0x3a, 0xa1, 0x00, 0xc0);
-                attack();
-                player_state = 2;
+                attack(2);
+                
             }
-           
+
             PlayerMovement(); // Permite el movimiento en el aire
             ladders();        //permite el subir escaleras estando en el aire
             break;
@@ -621,7 +640,7 @@ void Update_SpritePlayer()
             {
                 SetSpriteAnim(THIS, p_anim_ladders, 1);
             }
-           
+
             //Check the end of the ladder
             if (i != 126u && i != 1u && i != 2u)
             {
@@ -641,7 +660,9 @@ void Update_SpritePlayer()
             hit(hit_dir);
             break;
 
-
+        case 7:
+                transform1Attack();
+            break;
         case 9: // death
             SetSpriteAnim(THIS, p_anim_death, 5);
             if (THIS->anim_frame == 3)
@@ -665,7 +686,7 @@ void Update_SpritePlayer()
 
         case 11:
             SetSpriteAnim(THIS, p_anim_attack, 17);
-                if (THIS->anim_frame == 3)
+            if (THIS->anim_frame == 3)
             {
 
                 player_state = 3;
@@ -689,10 +710,12 @@ void Update_SpritePlayer()
             if (tile_collision && !TranslateSprite(THIS, 0, (player_accel_y >> (-4 << delta_time))))
             {
                 player_accel_y = 0;
-                if( player_state == 2 && THIS->anim_frame <= 1){
+                if (player_state == 2 && THIS->anim_frame <= 1)
+                {
                     player_accel_y = 0;
                     player_state = 11;
-                }else if (player_state == 3 )
+                }
+                else if (player_state == 3)
                 {
                     player_state = 0;
                 }
@@ -703,7 +726,7 @@ void Update_SpritePlayer()
                 player_state = 3;
             }
         }
-         if (player_parent && player_state == 3)
+        if (player_parent && player_state == 3)
         {
             player_accel_y = 0;
             player_state = 0;

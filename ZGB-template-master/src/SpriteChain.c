@@ -12,7 +12,7 @@ extern INT8 player_state;
 void WhipSound()
 {
 
-    if (THIS->anim_frame == 3)
+    if (THIS->anim_frame == 2)
     {
         PlayFx(CHANNEL_4, 10, 0x3d, 0xa1, 0x02, 0x80);
     }
@@ -72,8 +72,7 @@ void Update_SpriteChain()
     UINT8 i;
     struct Sprite *spr;
     SPRITE_SET_PALETTE(THIS, 0);
-    if (!canTransform)
-    {
+    
         WhipSound();
         if (SPRITE_GET_VMIRROR(THIS))
         {
@@ -138,33 +137,8 @@ void Update_SpriteChain()
         {
             SpriteManagerRemove(THIS_IDX);
         }
-    }
-    else
-    {
-        if (data->start)
-        {
-            SetSpriteAnim(THIS, fireBall_anim, 30);
-            FireBallDirection(data);
-            data->start = FALSE;
-        }
-
-        if (TranslateSprite(THIS, data->accel_x, 0))
-        {
-            SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-            SpriteManagerRemove(THIS_IDX);
-        }
-        SPRITEMANAGER_ITERATE(i, spr)
-        {
-            if (spr->type == SpriteSkeleton)
-            {
-                if (CheckCollision(THIS, spr))
-                {
-                    SpriteManagerAdd(SpriteExplosion, THIS->x, THIS->y);
-                    SpriteManagerRemove(THIS_IDX);
-                }
-            }
-        }
-    }
+    
+    
 }
 
 void Destroy_SpriteChain()
