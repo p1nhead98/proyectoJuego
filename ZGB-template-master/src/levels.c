@@ -5,6 +5,7 @@
 #include "..\res\src\town1_2.h"
 #include "..\res\src\town1_3.h"
 #include "..\res\src\town1_4.h"
+#include "..\res\src\town1_5.h"
 #include "..\res\src\house1_1.h"
 #include "..\res\src\house1_2.h"
 #include "..\res\src\house1_3.h"
@@ -18,6 +19,7 @@ const struct MapInfo* levels[] = {
     &house1_2,
     &house1_3,
     &town1_3,
+    &town1_5,
     &town1_4,
 };
 

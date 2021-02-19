@@ -5,6 +5,7 @@
 #include "..\res\src\player2.h"
 #include "..\res\src\transform.h"
 #include <string.h>
+#include "effects.h"
 #include "ZGBMain.h"
 #include "Scroll.h"
 #include "SpriteManager.h"
@@ -12,69 +13,63 @@
 #include "SpriteManager.h"
 #include <BankManager.h>
 
-
 void AnimateTiles_stage1();
 
-void SetAnimTilesInt() {
-    
+void SetAnimTilesInt()
+{
+
 	disable_interrupts();
 	add_VBL(AnimateTiles_stage1);
 	enable_interrupts();
 }
 
-void AnimateTiles_stage1() {
+void AnimateTiles_stage1()
+{
 	extern UINT8 x;
 	extern UINT8 x2;
 	unsigned char tileData[16];
-    
+
 	PUSH_BANK(sky1.bank);
 
 	memcpy(tileData, &sky1.data->data[16 * (x % 16)], 16);
 	set_bkg_data(21, 1, tileData);
 	POP_BANK;
 
-    PUSH_BANK(sky2.bank);
-    memcpy(tileData, &sky2.data->data[16 * (x % 16)], 16);
+	PUSH_BANK(sky2.bank);
+	memcpy(tileData, &sky2.data->data[16 * (x % 16)], 16);
 	set_bkg_data(27, 1, tileData);
 	POP_BANK;
 
 	PUSH_BANK(wateranim.bank);
-    memcpy(tileData, &wateranim.data->data[16 * (x2 % 8)], 16);
+	memcpy(tileData, &wateranim.data->data[16 * (x2 % 8)], 16);
 	set_bkg_data(37, 1, tileData);
 	POP_BANK;
-
-    
-
- }
-
-void ScreenShake(){
-    UINT8 i = 0;
-   
-    if(i <= 21){
-        i++;
-        if(i % 2 == 0){
-            scroll_x = scroll_x + 6;
-        }else{
-            scroll_x = scroll_x - 6;
-        }
-        
-    }
 }
 
-void TransformPlayer(){
+void ScreenShake(INT8 x)
+{
+	scroll_x = scroll_x + x;
+}
+
+void TransformPlayer()
+{
 	extern BOOLEAN canTransform;
-	if(canTransform == TRUE){
+	if (canTransform == TRUE)
+	{
 		PUSH_BANK(player2.bank)
-		set_sprite_data(0,48,&player2.data->data[0]);
+		set_sprite_data(0, 48, &player2.data->data[0]);
 		POP_BANK;
-	}else if(canTransform == FALSE){
+	}
+	else if (canTransform == FALSE)
+	{
 		PUSH_BANK(player.bank)
-		set_sprite_data(0,48,&player.data->data[0]);
+		set_sprite_data(0, 48, &player.data->data[0]);
 		POP_BANK;
 	}
 }
 
-void Transforming(){
+void Transforming()
+{
 	PUSH_BANK(transform.bank);
 	set_sprite_data(0, 16, &transform.data->data[0]);
 	POP_BANK;

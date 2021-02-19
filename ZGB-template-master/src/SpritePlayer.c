@@ -819,11 +819,11 @@ void Update_SpritePlayer()
                     }
                 }
             }
-            if (spr->type == SpriteLand || spr->type == SpriteFallenLog)
+            if (spr->type == SpriteLand)
             {
                 if (CheckCollision(THIS, spr) && player_accel_y > 15)
                 {
-                    if (THIS->y + 4 < spr->y)
+                    if (THIS->y + 4 < spr->y )
                     {
                         THIS->y = spr->y - 15;
                         player_accel_y = 15;

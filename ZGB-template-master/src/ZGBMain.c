@@ -11,7 +11,7 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 			case 1: *tile = 0; break;
 			case 2: *tile = 2; break;
 			case 3: *tile = 0; break;
-			case 6: *tile = 1; break;
+			case 6: *tile = 18; break;
 			default: *tile = 0; break;
 		}
 		
@@ -34,6 +34,7 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 		case 239: return SpriteFallenLog; break;
 		case 238: return SpriteSpitter; break;
 		case 237: return SpriteSwingingLog; break;
+		case 236: return SpriteMidBoss1; break;
 		}
 
 		*tile = *tile_ptr;

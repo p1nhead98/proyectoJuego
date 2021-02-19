@@ -4,7 +4,7 @@
 #include "ZGBMain.h"
 #include "Math.h"
 #include "Scroll.h"
-
+#include "effects.h"
 
 extern INT16 player_x;
 extern INT16 player_y;
@@ -193,7 +193,7 @@ void Update_SpriteSkelBoss(){
                     
                     data->state = 3;
                     bossSkelJump(data);
-                    ScreenShake();
+                    ScreenShake(13);
                 }
             break;
 

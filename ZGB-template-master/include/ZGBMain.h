@@ -41,6 +41,7 @@ _SPRITE_DMG(SpriteTinyEye, eye2)\
 _SPRITE_DMG(SpriteFallenLog, fallinLog)\
 _SPRITE_DMG(SpriteSpitter, spitter)\
 _SPRITE_DMG(SpriteSwingingLog, swingingLog)\
+_SPRITE_DMG(SpriteMidBoss1, midBoss1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

@@ -5,6 +5,7 @@
 #include "ZGBMain.h"
 #include "Math.h"
 #include "Scroll.h"
+#include "effects.h"
 
 const UINT8 arm0[] = {5,2,2,2,2,2};
 const UINT8 arm1[] = {1,2};
@@ -148,7 +149,7 @@ void Update_SpriteBoss1Arm(){
             if(TranslateSprite(THIS,0,3)){
                 if(data->state == 2){
                     data->state = 3;
-                    ScreenShake();
+                    ScreenShake(9);
                     data->counter++;
                     
                 }
@@ -283,7 +284,7 @@ void Update_SpriteBoss1Arm(){
                 }
 
                 if(TranslateSprite(THIS,0,3)){
-                    ScreenShake();
+                    ScreenShake(9);
                     if(data->counter <= 1){
                         data->state2 = 2;
                         data->counter++;

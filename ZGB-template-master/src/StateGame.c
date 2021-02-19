@@ -26,7 +26,7 @@
 
 
 
-UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,78,79,80,81,82,83,84,0};
+UINT8 col_tiles_town[] = {3,4,5,6,7,8,9,10,11,12,13,14,31,32,78,79,80,81,82,83,84,85,86,87,88,0};
 UINT8 col_down_town[] = {126,127,0};
 const UINT16 bp_town1[] = {PALETTE_FROM_HEADER(towntilesgb)};
 
@@ -125,7 +125,7 @@ void Start_StateGame() {
 	switch(current_level){
 	
 		case 0:
-			
+		
 			SpriteManagerLoad(2);
 			
 			if(last_level == 0){
@@ -225,16 +225,17 @@ void Start_StateGame() {
 			InitScroll(level, col_tiles_town, col_down_town);
 		break;
 		case 6:
-			
-			SpriteManagerLoad(22);
-			SpriteManagerLoad(23);
-			SpriteManagerLoad(24);
-			if(last_level == 4){
+				SpriteManagerLoad(32);
+		
+			// SpriteManagerLoad(22);
+			// SpriteManagerLoad(23);
+			// SpriteManagerLoad(24);
+		
 				scroll_target = SpriteManagerAdd(SpritePlayer, 9, 128);
-			}
-			SetPalette(SPRITES_PALETTE, 0, 8, s_boss1, bank_StateGame);
+			
+			SetPalette(SPRITES_PALETTE, 0, 8,  s_palette_1, bank_StateGame);
 			SetPalette(BG_PALETTE, 0, 8, bp_town1, bank_StateGame);
-			InitScroll(level, col_tiles_town2, col_down_town);
+			InitScroll(level, col_tiles_town, col_down_town);
 		break;
 		break;
 
@@ -278,14 +279,14 @@ void Update_StateGame() {
 
 	if(current_level == 0){
 		if (--count == 0) {	
-			count = 4;	
+			count = 2;	
 			x-- ;
 			x2++;
 			AnimateTiles_stage1();
 		}
-	}else if(current_level == 2 ||  current_level ==5){
+	}else if(current_level == 2 ||  current_level ==5 || current_level == 6 ){
 		if (--count == 0) {	
-			count = 7;	
+			count = 2;	
 			x-- ;
 			AnimateTiles_stage1();
 		}	
